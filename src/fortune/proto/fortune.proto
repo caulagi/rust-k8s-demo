@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "FortuneProto";
+
+package fortune;
+
+// The fortune service definition.
+service Fortuner {
+  // Get a random fortune
+  rpc GetRandom (FortuneRequest) returns (FortuneResponse) {}
+}
+
+// Request to get a random fortune
+message FortuneRequest {
+}
+
+// The response message containing a random fortune
+message FortuneResponse {
+  string message = 1;
+}
