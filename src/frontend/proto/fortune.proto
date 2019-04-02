@@ -7,9 +7,9 @@ option java_outer_classname = "FortuneProto";
 package fortune;
 
 // The fortune service definition.
-service Fortuner {
+service Fortune {
   // Get a random fortune
-  rpc GetRandom (FortuneRequest) returns (FortuneResponse) {}
+  rpc GetRandomFortune (FortuneRequest) returns (FortuneResponse) {}
 }
 
 // Request to get a random fortune
