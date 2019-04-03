@@ -21,9 +21,9 @@ use tower_grpc::{Request, Response};
 use tower_h2::Server;
 
 #[derive(Clone, Debug)]
-struct RandomFortune;
+struct Service;
 
-impl server::Fortune for RandomFortune {
+impl server::Fortune for Service {
     type GetRandomFortuneFuture =
         future::FutureResult<Response<FortuneResponse>, tower_grpc::Status>;
 
@@ -42,12 +42,13 @@ impl server::Fortune for RandomFortune {
 }
 
 pub fn main() {
-    ::env_logger::init();
+    env_logger::init();
 
-    let new_service = server::FortuneServer::new(RandomFortune);
-
-    let h2_settings = Default::default();
-    let mut h2 = Server::new(new_service, h2_settings, DefaultExecutor::current());
+    let mut h2 = Server::new(
+        server::FortuneServer::new(Service),
+        Default::default(),
+        DefaultExecutor::current(),
+    );
 
     let addr = "127.0.0.1:50051".parse().unwrap();
     let bind = TcpListener::bind(&addr).expect("bind");
