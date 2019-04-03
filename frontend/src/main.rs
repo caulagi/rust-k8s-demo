@@ -30,7 +30,7 @@ pub fn main() {
 
     ServiceBuilder::new()
         .resource(Quotation)
-        .middleware(LogMiddleware::new("web::frontend"))
+        .middleware(LogMiddleware::new("frontend"))
         .run(&addr)
         .unwrap();
 }
