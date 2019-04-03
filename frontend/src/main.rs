@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate tower_web;
+extern crate pretty_env_logger;
 extern crate tokio;
+#[macro_use]
+extern crate log;
 mod grpc_client;
 
 use grpc_client::make_request;
@@ -21,9 +24,9 @@ impl_web! {
 }
 
 pub fn main() {
-    ::env_logger::init();
+    pretty_env_logger::init();
     let addr = "127.0.0.1:8080".parse().expect("Invalid address");
-    println!("Listening on http://{}", addr);
+    info!("Listening on http://{}", addr);
 
     ServiceBuilder::new()
         .resource(Quotation)

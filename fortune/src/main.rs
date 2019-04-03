@@ -1,6 +1,6 @@
 extern crate bytes;
-extern crate env_logger;
 extern crate futures;
+extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
 extern crate prost;
@@ -31,7 +31,7 @@ impl server::Fortune for Service {
         &mut self,
         request: Request<FortuneRequest>,
     ) -> Self::GetRandomFortuneFuture {
-        println!("REQUEST = {:?}", request);
+        info!("REQUEST = {:?}", request);
 
         let response = Response::new(FortuneResponse {
             message: "Zomg, it works!".to_string(),
@@ -42,7 +42,7 @@ impl server::Fortune for Service {
 }
 
 pub fn main() {
-    env_logger::init();
+    pretty_env_logger::init();
 
     let mut h2 = Server::new(
         server::FortuneServer::new(Service),

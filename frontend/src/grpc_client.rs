@@ -1,7 +1,5 @@
-extern crate env_logger;
 extern crate futures;
 extern crate http;
-extern crate log;
 extern crate prost;
 extern crate tokio;
 extern crate tower;
@@ -46,10 +44,10 @@ pub fn make_request() {
                 .map_err(|e| panic!("gRPC request failed; err={:?}", e))
         })
         .map(|response| {
-            println!("RESPONSE = {:?}", response);
+            info!("RESPONSE = {:?}", response);
         })
         .map_err(|e| {
-            println!("ERR = {:?}", e);
+            error!("ERR = {:?}", e);
         });
     tokio::spawn(task);
 }
