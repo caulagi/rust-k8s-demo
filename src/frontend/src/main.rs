@@ -14,8 +14,7 @@ impl_web! {
     impl Quotation {
         #[get("/")]
         fn get_fortune(&self) -> Result<&'static str, ()> {
-             make_request();
-
+            make_request();
             Ok("whee!")
         }
     }

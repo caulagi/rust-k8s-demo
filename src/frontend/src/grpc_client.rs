@@ -23,9 +23,8 @@ pub mod fortune {
 }
 
 pub fn make_request() {
-    let uri: http::Uri = format!("http://localhost:50051").parse().unwrap();
-    let h2_settings = Default::default();
-    let mut make_client = client::Connect::new(Dst, h2_settings, DefaultExecutor::current());
+    let uri: http::Uri = "http://localhost:50051".parse().unwrap();
+    let mut make_client = client::Connect::new(Dst, Default::default(), DefaultExecutor::current());
 
     let task = make_client
         .make_service(())
