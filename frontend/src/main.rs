@@ -1,29 +1,16 @@
 #[macro_use]
 extern crate tower_web;
-extern crate futures;
 extern crate pretty_env_logger;
 extern crate tokio;
 #[macro_use]
 extern crate log;
 
 mod grpc_client;
+mod views;
 
-use futures::prelude::Future;
-use grpc_client::get_fortune;
 use tower_web::middleware::log::LogMiddleware;
 use tower_web::ServiceBuilder;
-
-#[derive(Clone, Debug)]
-struct Quotation;
-
-impl_web! {
-    impl Quotation {
-        #[get("/")]
-        fn get_fortune(&self) -> impl Future<Item = String, Error = ()> {
-            get_fortune()
-        }
-    }
-}
+use crate::views::Quotation;
 
 pub fn main() {
     pretty_env_logger::init();
