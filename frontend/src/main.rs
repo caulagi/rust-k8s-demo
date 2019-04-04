@@ -1,27 +1,15 @@
 #[macro_use]
 extern crate tower_web;
 extern crate pretty_env_logger;
-extern crate tokio;
 #[macro_use]
 extern crate log;
-mod grpc_client;
 
-use grpc_client::make_request;
+mod grpc_client;
+mod views;
+
+use crate::views::Quotation;
 use tower_web::middleware::log::LogMiddleware;
 use tower_web::ServiceBuilder;
-
-#[derive(Clone, Debug)]
-struct Quotation;
-
-impl_web! {
-    impl Quotation {
-        #[get("/")]
-        fn get_fortune(&self) -> Result<&'static str, ()> {
-            make_request();
-            Ok("whee!")
-        }
-    }
-}
 
 pub fn main() {
     pretty_env_logger::init();
