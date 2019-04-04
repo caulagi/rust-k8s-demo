@@ -1,4 +1,3 @@
-
 extern crate futures;
 extern crate pretty_env_logger;
 #[macro_use]
@@ -8,17 +7,18 @@ extern crate tokio;
 extern crate tower_grpc;
 extern crate tower_h2;
 
-pub mod fortune {
-    include!(concat!(env!("OUT_DIR"), "/fortune.rs"));
-}
-
 use fortune::{server, FortuneRequest, FortuneResponse};
 
 use futures::{future, Future, Stream};
+use std::process::Command;
 use tokio::executor::DefaultExecutor;
 use tokio::net::TcpListener;
 use tower_grpc::{Request, Response};
 use tower_h2::Server;
+
+pub mod fortune {
+    include!(concat!(env!("OUT_DIR"), "/fortune.rs"));
+}
 
 #[derive(Clone, Debug)]
 struct Service;
@@ -32,8 +32,11 @@ impl server::Fortune for Service {
         request: Request<FortuneRequest>,
     ) -> Self::GetRandomFortuneFuture {
         info!("REQUEST = {:?}", request);
+        let cookie = Command::new(env!("FORTUNE_PATH"))
+            .output()
+            .expect("failed to execute process");
         let response = Response::new(FortuneResponse {
-            message: "Zomg, it works!".to_string(),
+            message: String::from_utf8_lossy(&cookie.stdout).to_string(),
         });
 
         future::ok(response)
