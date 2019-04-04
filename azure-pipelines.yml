@@ -1,6 +1,9 @@
 trigger: ["master"]
 pr: ["master"]
 
+variables:
+  fortune_path: /dev/null
+
 jobs:
 - template: ci/azure-rustfmt.yml
   parameters:
