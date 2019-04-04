@@ -16,8 +16,7 @@ use tokio::prelude::*;
 use tower::MakeService;
 use tower_add_origin::{AddOrigin, Builder};
 use tower_buffer::Buffer;
-use tower_grpc::BoxBody;
-use tower_grpc::Request;
+use tower_grpc::{BoxBody, Request};
 use tower_h2::client::{Connect, ConnectError, Connection};
 use tower_service::Service;
 

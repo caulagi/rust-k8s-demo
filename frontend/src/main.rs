@@ -1,16 +1,15 @@
 #[macro_use]
 extern crate tower_web;
 extern crate pretty_env_logger;
-extern crate tokio;
 #[macro_use]
 extern crate log;
 
 mod grpc_client;
 mod views;
 
+use crate::views::Quotation;
 use tower_web::middleware::log::LogMiddleware;
 use tower_web::ServiceBuilder;
-use crate::views::Quotation;
 
 pub fn main() {
     pretty_env_logger::init();
