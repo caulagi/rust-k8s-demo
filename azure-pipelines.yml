@@ -16,5 +16,5 @@ jobs:
     displayName: Build
     vmImage: ubuntu-16.04
     crates:
-      - fortune
-      - frontend
+      - fortuneservice
+      - frontendservice

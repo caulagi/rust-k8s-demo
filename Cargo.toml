@@ -8,16 +8,16 @@ license = "MIT"
 
 [[bin]]
 name = "fortune-server"
-path = "fortune/src/main.rs"
+path = "fortuneservice/src/main.rs"
 
 [[bin]]
 name = "frontend-server"
-path = "frontend/src/main.rs"
+path = "frontendservice/src/main.rs"
 
 [workspace]
 members = [
-  "fortune",
-  "frontend",
+  "fortuneservice",
+  "frontendservice",
 ]
 
 [patch.crates-io]
