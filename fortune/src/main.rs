@@ -1,4 +1,4 @@
-extern crate bytes;
+
 extern crate futures;
 extern crate pretty_env_logger;
 #[macro_use]
@@ -32,7 +32,6 @@ impl server::Fortune for Service {
         request: Request<FortuneRequest>,
     ) -> Self::GetRandomFortuneFuture {
         info!("REQUEST = {:?}", request);
-
         let response = Response::new(FortuneResponse {
             message: "Zomg, it works!".to_string(),
         });
