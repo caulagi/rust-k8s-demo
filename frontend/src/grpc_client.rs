@@ -39,7 +39,7 @@ fn create_client(
 
         let buffer = match Buffer::new(connection, 128) {
             Ok(b) => b,
-            _ => panic!("asdf"),
+            _ => panic!("Unable to accept connection"),
         };
 
         fortune::client::Fortune::new(buffer)
@@ -61,7 +61,7 @@ pub fn get_fortune() -> impl Future<Item = String, Error = ()> {
         .then(|r| {
             let resp = match r {
                 Ok(b) => b,
-                _ => panic!("asdf"),
+                _ => panic!("Unknown response"),
             };
             future::ok(resp.into_inner().message.to_string())
         })
