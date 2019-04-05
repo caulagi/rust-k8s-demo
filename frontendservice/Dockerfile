@@ -1,5 +1,7 @@
 FROM rust:1.33-slim as build
 
+env FORTUNE_SERVICE_ADDR will-be-added-at-runtime
+
 WORKDIR /code
 COPY Cargo.toml Cargo.lock ./
 
@@ -11,4 +13,4 @@ WORKDIR /code/frontendservice
 RUN cargo build
 
 EXPOSE 8080
-ENTRYPOINT ["/code/frontendservice/target/server"]
+ENTRYPOINT ["/code/target/debug/frontend"]

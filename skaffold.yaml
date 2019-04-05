@@ -1,0 +1,18 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  artifacts:
+  - image: fortuneservice
+    context: .
+    docker:
+      dockerfile: fortuneservice/Dockerfile
+  - image: frontendservice
+    context: .
+    docker:
+      dockerfile: frontendservice/Dockerfile
+  tagPolicy:
+    gitCommit: {}
+deploy:
+  kubectl:
+    manifests:
+    - ./kubernetes-manifests/**.yaml

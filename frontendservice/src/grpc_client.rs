@@ -30,7 +30,9 @@ type RpcClient = fortune::client::Fortune<Buf>;
 
 fn create_client(
 ) -> impl Future<Item = RpcClient, Error = ConnectError<std::io::Error>> + Send + 'static {
-    let uri: http::Uri = "http://localhost:50051".parse().unwrap();
+    let uri: http::Uri = format!("http://{}", env!("FORTUNE_SERVICE_ADDR"))
+        .parse()
+        .unwrap();
     let mut make_client = Connect::new(Dst, Default::default(), DefaultExecutor::current());
 
     make_client.make_service(()).map(|c| {
@@ -79,6 +81,11 @@ impl Service<()> for Dst {
     }
 
     fn call(&mut self, _: ()) -> Self::Future {
-        TcpStream::connect(&([127, 0, 0, 1], 50051).into())
+        use std::net::SocketAddr;
+
+        let addr: SocketAddr = env!("FORTUNE_SERVICE_ADDR")
+            .parse()
+            .expect("Unable to connect to fortune service");
+        TcpStream::connect(&addr)
     }
 }

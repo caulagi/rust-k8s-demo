@@ -52,7 +52,7 @@ pub fn main() {
         DefaultExecutor::current(),
     );
 
-    let addr = "127.0.0.1:50051".parse().unwrap();
+    let addr = "0.0.0.0:50051".parse().unwrap();
     let bind = TcpListener::bind(&addr).expect("bind");
 
     let serve = bind
