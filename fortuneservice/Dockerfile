@@ -1,5 +1,6 @@
 FROM rust:1.33-slim as build
 
+ENV RUST_LOG fortune=debug
 ENV FORTUNE_PATH /usr/games/fortune
 
 COPY . /code
