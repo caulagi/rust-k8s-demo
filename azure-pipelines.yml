@@ -9,12 +9,17 @@ variables:
 jobs:
 - template: ci/azure-rustfmt.yml
   parameters:
-    name: rustfmt
+    name: Rustfmt
+    displayName: Rustfmt
+    vmImage: ubuntu-16.04
+    crates:
+      - fortuneservice
+      - frontendservice
 
 # Basic test run on all platforms
 - template: ci/azure-build-stable.yml
   parameters:
-    name: Linux_Stable
+    name: Build
     displayName: Build
     vmImage: ubuntu-16.04
     crates:
