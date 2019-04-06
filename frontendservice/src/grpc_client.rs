@@ -10,6 +10,9 @@ extern crate tower_h2;
 extern crate tower_service;
 
 use futures::{Future, Poll};
+use std::os::unix::io::AsRawFd;
+use std::os::unix::io::FromRawFd;
+use std::process::{Command, Stdio};
 use tokio::executor::DefaultExecutor;
 use tokio::net::tcp::{ConnectFuture, TcpStream};
 use tokio::prelude::*;
@@ -28,11 +31,43 @@ type Buf =
     Buffer<AddOrigin<Connection<TcpStream, DefaultExecutor, BoxBody>>, http::Request<BoxBody>>;
 type RpcClient = fortune::client::Fortune<Buf>;
 
+/// Resolve the hostname (like fortuneservice) to an ip where
+/// the service is running. The result is used both as a string
+/// and IPV4Addr, so returning string is more generic.
+///
+/// FIXME: Use a better solution (maybe domain or trust-dns)?
+fn hostname_to_ip() -> String {
+    info!("resolving fortuneservice");
+    let child = Command::new(env!("GETENT_PATH"))
+        .args(&["hosts", env!("FORTUNE_SERVICE_HOSTNAME")])
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("should resolve");
+    debug!("{:?}", child);
+    let out = match child.stdout {
+        Some(stdout) => stdout,
+        None => panic!("getent failed"),
+    };
+    debug!("{:?}", out);
+    let stdio = unsafe { Stdio::from_raw_fd(out.as_raw_fd()) };
+    let first_ip = Command::new("head")
+        .args(&["-1"])
+        .stdin(stdio)
+        .output()
+        .expect("2");
+    let a = String::from_utf8(first_ip.stdout).expect("first ip stdout");
+    let mut parts = a.split_whitespace();
+    let ip = match parts.next() {
+        Some(x) => x,
+        None => panic!("No ip"),
+    };
+    info!("{} resolved to {:?}", env!("FORTUNE_SERVICE_HOSTNAME"), ip);
+    ip.to_string()
+}
+
 fn create_client(
 ) -> impl Future<Item = RpcClient, Error = ConnectError<std::io::Error>> + Send + 'static {
-    let uri: http::Uri = format!("http://{}", env!("FORTUNE_SERVICE_HOSTNAME"))
-        .parse()
-        .unwrap();
+    let uri: http::Uri = format!("http://{}", hostname_to_ip()).parse().unwrap();
     let mut make_client = Connect::new(Dst, Default::default(), DefaultExecutor::current());
 
     make_client.make_service(()).map(|c| {
@@ -81,39 +116,7 @@ impl Service<()> for Dst {
     }
 
     fn call(&mut self, _: ()) -> Self::Future {
-        use std::net::SocketAddr;
-        use std::os::unix::io::AsRawFd;
-        use std::os::unix::io::FromRawFd;
-        use std::process::{Command, Stdio};
-
-        info!("resolving fortuneservice");
-        let child = Command::new(env!("GETENT_PATH"))
-            .args(&["hosts", env!("FORTUNE_SERVICE_HOSTNAME")])
-            .stdout(Stdio::piped())
-            .spawn()
-            .expect("should resolve");
-        info!("{:?}", child);
-        let out = match child.stdout {
-            Some(stdout) => stdout,
-            None => panic!("getent failed"),
-        };
-        info!("{:?}", out);
-        let stdio = unsafe { Stdio::from_raw_fd(out.as_raw_fd()) };
-        let first_ip = Command::new("head")
-            .args(&["-1"])
-            .stdin(stdio)
-            .output()
-            .expect("2");
-        let a = String::from_utf8(first_ip.stdout).expect("first ip stdout");
-        let mut parts = a.split_whitespace();
-        let ip = match parts.next() {
-            Some(x) => x,
-            None => panic!("No ip"),
-        };
-        info!("**** {:?}", ip);
-
-        let addr = format!("{}:50051", ip).parse().unwrap();
-        info!("*** connecting to {}", addr);
+        let addr = format!("{}:50051", hostname_to_ip()).parse().unwrap();
         TcpStream::connect(&addr)
     }
 }
