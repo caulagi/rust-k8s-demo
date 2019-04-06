@@ -22,7 +22,6 @@ use tower_buffer::Buffer;
 use tower_grpc::{BoxBody, Request};
 use tower_h2::client::{Connect, ConnectError, Connection};
 use tower_service::Service;
-use std::net::IpAddr;
 
 pub mod fortune {
     include!(concat!(env!("OUT_DIR"), "/fortune.rs"));
