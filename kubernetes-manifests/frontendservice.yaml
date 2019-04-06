@@ -28,10 +28,12 @@ spec:
             path: "/"
             port: 8080
         env:
-        - name: FORTUNE_SERVICE_ADDR
-          value: "fortuneservice:50051"
+        - name: FORTUNE_SERVICE_HOSTNAME
+          value: "fortuneservice"
         - name: RUST_LOG
           value: frontend=debug
+        - name: GETENT_PATH
+          value: /usr/bin/getent
         resources:
           requests:
             cpu: 100m

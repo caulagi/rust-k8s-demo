@@ -1,6 +1,8 @@
 FROM rust:1.33-slim as build
 
-env FORTUNE_SERVICE_ADDR will-be-added-at-runtime
+ENV RUST_LOG frontend=debug
+ENV GETENT_PATH /usr/bin/getent
+ENV FORTUNE_SERVICE_HOSTNAME will-be-added-at-runtime
 
 WORKDIR /code
 COPY Cargo.toml Cargo.lock ./
