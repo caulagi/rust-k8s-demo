@@ -5,8 +5,8 @@
 
 **TL;DR** `skaffold run --tail` and go to [localhost](http://localhost)
 
-This project is an experiment with how modern web applications would look
-when using Rust and Kubernetes. It is based on [microservices-demo][demo].
+This project is an experiment with how modern web applications would look like
+when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
 
 ## Features
 
@@ -19,12 +19,12 @@ when using Rust and Kubernetes. It is based on [microservices-demo][demo].
 
 **Use one of the options below**. They all do the same thing.
 
-#### Skaffold
+#### [Skaffold](https://skaffold.dev/)
 
-There are a few options. The simplest is to follow the guide from [microservices-demo][demo]
-to setup kubernetes for docker. Install [skaffold](https://skaffold.dev/).
+This is the simplest option to try out the project. Follow the guide from [demo][demo]
+project to setup kubernetes for docker and skaffold.
 
-```bash
+```shell
 $ skaffold run --tail
 
 # goto http://localhost
@@ -32,7 +32,7 @@ $ skaffold run --tail
 
 #### Using docker
 
-```bash
+```shell
 $ docker build -t frontend frontendservice
 $ docker build -t fortune fortuneservice
 
@@ -45,11 +45,11 @@ $ docker run -it -p 50051:50051 fortune
 
 #### Really local
 
-You need the rust toolchain and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
+You need the [rust toolchain](https://rustup.rs/) and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
 You also need [getent](https://en.wikipedia.org/wiki/Getent) (for now). On OSX,
 you can put [this file][getent-osx] in your path as the binary.
 
-```bash
+```shell
 $ cd frontendservice
 $ FORTUNE_SERVICE_HOSTNAME=localhost GETENT_PATH=~/bin/getent RUST_LOG=frontend=debug cargo run
 
