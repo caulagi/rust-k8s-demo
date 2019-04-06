@@ -37,7 +37,10 @@ type RpcClient = fortune::client::Fortune<Buf>;
 ///
 /// FIXME: Use a better solution (maybe domain or trust-dns)?
 fn hostname_to_ip() -> String {
-    info!("resolving fortuneservice: {}", env!("FORTUNE_SERVICE_HOSTNAME"));
+    info!(
+        "resolving fortuneservice: {}",
+        env!("FORTUNE_SERVICE_HOSTNAME")
+    );
     let child = Command::new(env!("GETENT_PATH"))
         .args(&["hosts", env!("FORTUNE_SERVICE_HOSTNAME")])
         .stdout(Stdio::piped())

@@ -3,7 +3,7 @@ pr: ["master"]
 
 variables:
   fortune_path: /dev/null
-  fortune_service_hostname: will-be-provided-runtime
+  fortune_service_hostname: fortuneservice
   getent_path: /usr/bin/getent
 
 jobs:
