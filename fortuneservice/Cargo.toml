@@ -1,8 +1,10 @@
 [package]
-name = "fortune"
+name = "fortune-server"
 version = "0.1.0"
 authors = ["Pradip Caulagi <caulagi@gmail.com>"]
 edition = "2018"
+
+license = "MIT"
 
 [[bin]]
 name = "fortune-server"

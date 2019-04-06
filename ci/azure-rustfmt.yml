@@ -1,16 +1,18 @@
+parameters:
+  crates: []
+
 jobs:
-# Check formatting
 - job: ${{ parameters.name }}
-  displayName: Check rustfmt
+  displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: ubuntu-16.04
+    vmImage: ${{ parameters.vmImage }}
   steps:
-    - template: azure-install-rust.yml
-      parameters:
-        rust_version: stable
-    - bash: |
+  - template: azure-install-rust.yml
+    parameters:
+      rust_version: stable
+  - bash: |
         rustup component add rustfmt
-      displayName: Install rustfmt
-    - bash: |
-        cargo fmt --all -- --check
-      displayName: Check formatting
+  - ${{ each crate in parameters.crates }}:
+    - script: cargo fmt -- --check
+      displayName: cargo fmt -p ${{ crate }}
+      workingDirectory: $(Build.SourcesDirectory)/${{ crate }}
