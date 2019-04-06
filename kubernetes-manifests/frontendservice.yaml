@@ -1,0 +1,69 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontendservice
+spec:
+  selector:
+    matchLabels:
+      app: frontendservice
+  template:
+    metadata:
+      labels:
+        app: frontendservice
+    spec:
+      containers:
+      - name: server
+        image: frontendservice
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          initialDelaySeconds: 10
+          httpGet:
+            path: "/"
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 10
+          httpGet:
+            path: "/"
+            port: 8080
+        env:
+        - name: FORTUNE_SERVICE_HOSTNAME
+          value: "fortuneservice"
+        - name: RUST_LOG
+          value: frontend=debug
+        - name: GETENT_PATH
+          value: /usr/bin/getent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontendservice
+spec:
+  type: ClusterIP
+  selector:
+    app: frontendservice
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-external
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontendservice
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
