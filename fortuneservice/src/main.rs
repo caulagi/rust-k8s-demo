@@ -69,5 +69,6 @@ pub fn main() {
         })
         .map_err(|e| eprintln!("accept error: {}", e));
 
+    info!("Starting fortuneservice: {:?}", addr);
     tokio::run(serve)
 }

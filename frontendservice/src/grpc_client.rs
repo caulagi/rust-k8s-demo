@@ -10,6 +10,7 @@ extern crate tower_h2;
 extern crate tower_service;
 
 use futures::{Future, Poll};
+use std::env;
 use std::os::unix::io::AsRawFd;
 use std::os::unix::io::FromRawFd;
 use std::process::{Command, Stdio};
@@ -37,12 +38,13 @@ type RpcClient = fortune::client::Fortune<Buf>;
 ///
 /// FIXME: Use a better solution (maybe domain or trust-dns)?
 fn hostname_to_ip() -> String {
-    info!(
-        "resolving fortuneservice: {}",
-        env!("FORTUNE_SERVICE_HOSTNAME")
-    );
+    let service_hostname = match env::var("FORTUNE_SERVICE_HOSTNAME") {
+        Ok(val) => val,
+        Err(_) => panic!("Not able to find FORTUNE_SERVICE_HOSTNAME"),
+    };
+    info!("resolving fortuneservice: {}", service_hostname);
     let child = Command::new(env!("GETENT_PATH"))
-        .args(&["hosts", env!("FORTUNE_SERVICE_HOSTNAME")])
+        .args(&["hosts", service_hostname.as_str()])
         .stdout(Stdio::piped())
         .spawn()
         .expect("should resolve");
@@ -64,7 +66,7 @@ fn hostname_to_ip() -> String {
         Some(x) => x,
         None => panic!("No ip"),
     };
-    info!("{} resolved to {:?}", env!("FORTUNE_SERVICE_HOSTNAME"), ip);
+    info!("{} resolved to {:?}", service_hostname, ip);
     ip.to_string()
 }
 
