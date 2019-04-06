@@ -1,8 +1,12 @@
 [package]
-name = "frontend"
+name = "frontend-server"
 version = "0.1.0"
 authors = ["Pradip Caulagi <caulagi@gmail.com>"]
 edition = "2018"
+
+[[bin]]
+name = "frontend-server"
+path = "src/main.rs"
 
 [dependencies]
 bytes = "0.4"
@@ -22,3 +26,6 @@ tower-web = { git = "https://github.com/carllerche/tower-web", default-features 
 
 [build-dependencies]
 tower-grpc-build = { git = "https://github.com/tower-rs/tower-grpc" }
+
+[patch.crates-io]
+tower-service = { git = "https://github.com/tower-rs/tower" }

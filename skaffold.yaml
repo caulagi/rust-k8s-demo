@@ -3,13 +3,9 @@ kind: Config
 build:
   artifacts:
   - image: fortuneservice
-    context: .
-    docker:
-      dockerfile: fortuneservice/Dockerfile
+    context: fortuneservice
   - image: frontendservice
-    context: .
-    docker:
-      dockerfile: frontendservice/Dockerfile
+    context: frontendservice
   tagPolicy:
     gitCommit: {}
 deploy:
