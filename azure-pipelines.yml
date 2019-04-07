@@ -1,27 +1,26 @@
 trigger: ["master"]
 pr: ["master"]
 
+parameters:
+  services:
+    - frontendservice
+    - fortuneservice
+
 variables:
   fortune_path: /dev/null
   fortune_service_hostname: fortuneservice
   getent_path: /usr/bin/getent
 
 jobs:
-- template: ci/azure-rustfmt.yml
-  parameters:
-    name: Rustfmt
-    displayName: Rustfmt
-    vmImage: ubuntu-16.04
-    crates:
-      - fortuneservice
-      - frontendservice
+  - ${{ each service in parameters.services }}:
+    - template: ci/azure-rustfmt.yml
+      parameters:
+        name: ${{ service }}
+        displayName: Rustfmt ${{ service }}
+        vmImage: ubuntu-16.04
 
-# Basic test run on all platforms
-- template: ci/azure-build-stable.yml
-  parameters:
-    name: Build
-    displayName: Build
-    vmImage: ubuntu-16.04
-    crates:
-      - fortuneservice
-      - frontendservice
+    - template: ci/azure-build-stable.yml
+      parameters:
+        name: ${{ service }]
+        displayName: Build ${{ service }}
+        vmImage: ubuntu-16.04

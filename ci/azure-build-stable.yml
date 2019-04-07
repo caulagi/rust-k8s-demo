@@ -10,8 +10,6 @@ jobs:
   - template: azure-install-rust.yml
     parameters:
       rust_version: stable
-
-  - ${{ each crate in parameters.crates }}:
-    - script: cargo build
-      displayName: cargo build -p ${{ crate }}
-      workingDirectory: $(Build.SourcesDirectory)/${{ crate }}
+  - script: cargo build
+    displayName: cargo build
+    workingDirectory: $(Build.SourcesDirectory)/${{ parameters.name }}
