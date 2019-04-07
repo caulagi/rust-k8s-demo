@@ -12,4 +12,4 @@ jobs:
       rust_version: stable
   - script: cargo build
     displayName: cargo build
-    workingDirectory: $(Build.SourcesDirectory)/${{ parameters.name }}
+    workingDirectory: $(Build.SourcesDirectory)/${{ parameters.folder }}
