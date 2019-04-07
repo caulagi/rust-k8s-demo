@@ -8,6 +8,14 @@
 This project is an experiment with how modern web applications would look like
 when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
 
+It is a simple web application that returns a new [fortune cookie][fortune] for each request.
+
+There are two isolated microservices. The frontendservice provides one endpoint
+that clients (browsers) can connect to. The fortuneservice is a [grpc](https://grpc.io/) server,
+that answers with 'fortune cookies' for each request. Both the microservices
+use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/).
+
+
 ## Features
 
 - [x] Microservices talking to each other using grpc
@@ -51,10 +59,10 @@ you can put [this file][getent-osx] in your path as the binary.
 
 ```shell
 $ cd frontendservice
-$ FORTUNE_SERVICE_HOSTNAME=localhost GETENT_PATH=~/bin/getent RUST_LOG=frontend=debug cargo run
+$ FORTUNE_SERVICE_HOSTNAME=localhost GETENT_PATH=~/bin/getent RUST_LOG=frontend=info cargo run
 
 $ cd fortuneservice
-$ FORTUNE_PATH=/usr/local/bin/fortune cargo run
+$ FORTUNE_PATH=/usr/local/bin/fortune RUST_LOG=fortune=info cargo run
 
 # and goto http://localhost:8080
 ```
@@ -68,3 +76,4 @@ This project is licensed under [MIT](LICENSE).
 [azure-url]: https://dev.azure.com/caulagi/fortune-k8s-demo/_build/latest?definitionId=1&branchName=master
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
+[fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
