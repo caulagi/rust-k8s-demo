@@ -1,6 +1,6 @@
 FROM rust:1.33-slim as build
 
-ENV RUST_LOG frontend=debug
+ENV RUST_LOG frontend=info
 ENV GETENT_PATH /usr/bin/getent
 ENV FORTUNE_SERVICE_HOSTNAME fortuneservice
 
