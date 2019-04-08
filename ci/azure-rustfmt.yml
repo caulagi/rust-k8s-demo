@@ -1,6 +1,3 @@
-parameters:
-  crates: []
-
 jobs:
 - job: ${{ parameters.name }}
   displayName: ${{ parameters.displayName }}
@@ -12,7 +9,6 @@ jobs:
       rust_version: stable
   - bash: |
         rustup component add rustfmt
-  - ${{ each crate in parameters.crates }}:
-    - script: cargo fmt -- --check
-      displayName: cargo fmt -p ${{ crate }}
-      workingDirectory: $(Build.SourcesDirectory)/${{ crate }}
+  - script: cargo fmt -- --check
+    displayName: cargo fmt
+    workingDirectory: $(Build.SourcesDirectory)/${{ parameters.folder }}

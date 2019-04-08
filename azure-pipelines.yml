@@ -7,21 +7,32 @@ variables:
   getent_path: /usr/bin/getent
 
 jobs:
-- template: ci/azure-rustfmt.yml
-  parameters:
-    name: Rustfmt
-    displayName: Rustfmt
-    vmImage: ubuntu-16.04
-    crates:
-      - fortuneservice
-      - frontendservice
+  # frontendservice
+  - template: ci/azure-rustfmt.yml
+    parameters:
+      name: Rustfmt_frontendservice
+      displayName: Rustfmt frontendservice
+      vmImage: ubuntu-16.04
+      folder: frontendservice
 
-# Basic test run on all platforms
-- template: ci/azure-build-stable.yml
-  parameters:
-    name: Build
-    displayName: Build
-    vmImage: ubuntu-16.04
-    crates:
-      - fortuneservice
-      - frontendservice
+  - template: ci/azure-build-stable.yml
+    parameters:
+      name: Build_frontendservice
+      displayName: Build frontendservice
+      vmImage: ubuntu-16.04
+      folder: frontendservice
+
+  # fortuneservice
+  - template: ci/azure-rustfmt.yml
+    parameters:
+      name: Rustfmt_fortuneservice
+      displayName: Rustfmt fortuneservice
+      vmImage: ubuntu-16.04
+      folder: fortuneservice
+
+  - template: ci/azure-build-stable.yml
+    parameters:
+      name: Build_fortuneservice
+      displayName: Build fortuneservice
+      vmImage: ubuntu-16.04
+      folder: fortuneservice
