@@ -25,12 +25,8 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 ## Getting started
 
-Setup a local kubernetes cluster. For example, using [kind][kind]
-
-```shell
-$ GO111MODULE="on" go get sigs.k8s.io/kind@v0.6.1
-$ kind create cluster
-```
+Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
+(for Linux, see [CONTRIBUTING][CONTRIBUTING]).
 
 Install [skaffold](https://skaffold.dev/) and run the application
 
@@ -50,4 +46,4 @@ This project is licensed under [MIT](LICENSE).
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
-[kind]: https://github.com/kubernetes-sigs/kind
+[CONTRIBUTING]: ./.github/CONTRIBUTING.md
