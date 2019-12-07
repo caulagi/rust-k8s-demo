@@ -23,49 +23,18 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] CI (done)/CD (todo)
 - [ ] Service mesh and open tracing (todo)
 
-## Local development
+## Getting started
 
-**Use one of the options below**. They all do the same thing.
+Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
+(for Linux, see [CONTRIBUTING][CONTRIBUTING]).
 
-#### [Skaffold](https://skaffold.dev/)
-
-This is the simplest option to try out the project. Follow the guide from [demo][demo]
-project to setup kubernetes for docker and skaffold.
+Install [skaffold](https://skaffold.dev/) and run the application
 
 ```shell
 $ skaffold run --tail
-
-# goto http://localhost
 ```
 
-#### Using docker
-
-```shell
-$ docker build -t frontend frontendservice
-$ docker build -t fortune fortuneservice
-
-# for linux: FORTUNE_SERVICE_HOSTNAME=localhost
-$ docker run -it -p 8080:8080 -e FORTUNE_SERVICE_HOSTNAME=docker.for.mac.localhost frontend
-$ docker run -it -p 50051:50051 fortune
-
-# and goto http://localhost:8080
-```
-
-#### Really local
-
-You need the [rust toolchain](https://rustup.rs/) and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
-You also need [getent](https://en.wikipedia.org/wiki/Getent) (for now). On OSX,
-you can put [this file][getent-osx] in your path as the binary.
-
-```shell
-$ cd frontendservice
-$ FORTUNE_SERVICE_HOSTNAME=localhost GETENT_PATH=~/bin/getent RUST_LOG=frontend=info cargo run
-
-$ cd fortuneservice
-$ FORTUNE_PATH=/usr/local/bin/fortune RUST_LOG=fortune=info cargo run
-
-# and goto http://localhost:8080
-```
+**QED** - Go to [http://localhost](http://localhost)
 
 ## LICENSE
 
@@ -77,3 +46,4 @@ This project is licensed under [MIT](LICENSE).
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
+[CONTRIBUTING]: ./.github/CONTRIBUTING.md
