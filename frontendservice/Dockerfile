@@ -1,4 +1,4 @@
-FROM rust:1.33-slim as build
+FROM rust:1.39.0-slim-buster as build
 
 ENV RUST_LOG frontend=info
 ENV GETENT_PATH /usr/bin/getent
