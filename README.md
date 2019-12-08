@@ -44,6 +44,5 @@ This project is licensed under [MIT](LICENSE).
 [azure-badge]: https://dev.azure.com/caulagi/fortune-k8s-demo/_apis/build/status/caulagi.fortune-k8s-demo?branchName=master
 [azure-url]: https://dev.azure.com/caulagi/fortune-k8s-demo/_build/latest?definitionId=1&branchName=master
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
-[getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
 [CONTRIBUTING]: ./.github/CONTRIBUTING.md

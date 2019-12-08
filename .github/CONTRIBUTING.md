@@ -54,4 +54,5 @@ $ kubectl config rename-context "kind-kind" "kind-kind@kind"
 $ kubectl get pods --selector app=frontendservice -o json | jq  ".items[0].metadata.name" | xargs -I % kubectl port-forward pod/% 8080
 ```
 
+[getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
 [kind]: https://github.com/kubernetes-sigs/kind
