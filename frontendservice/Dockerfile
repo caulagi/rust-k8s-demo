@@ -7,6 +7,8 @@ ENV FORTUNE_SERVICE_HOSTNAME fortuneservice
 COPY . /code
 WORKDIR /code
 RUN cargo build
-
 EXPOSE 8080
-ENTRYPOINT ["/code/target/debug/frontend-server"]
+
+FROM debian:buster-slim
+COPY --from=build /code/target/debug/frontend-server /usr/local/bin/frontend-server
+ENTRYPOINT ["/usr/local/bin/frontend-server"]
