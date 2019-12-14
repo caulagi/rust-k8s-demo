@@ -1,3 +1,6 @@
+pool:
+  vmImage: ubuntu-18.04
+
 variables:
   fortune_path: /dev/null
   fortune_service_hostname: fortuneservice
@@ -9,14 +12,12 @@ jobs:
     parameters:
       name: Rustfmt_frontendservice
       displayName: Rustfmt frontendservice
-      vmImage: ubuntu-16.04
       folder: frontendservice
 
   - template: ci/azure-build-stable.yml
     parameters:
       name: Build_frontendservice
       displayName: Build frontendservice
-      vmImage: ubuntu-16.04
       folder: frontendservice
 
   # fortuneservice
@@ -24,12 +25,10 @@ jobs:
     parameters:
       name: Rustfmt_fortuneservice
       displayName: Rustfmt fortuneservice
-      vmImage: ubuntu-16.04
       folder: fortuneservice
 
   - template: ci/azure-build-stable.yml
     parameters:
       name: Build_fortuneservice
       displayName: Build fortuneservice
-      vmImage: ubuntu-16.04
       folder: fortuneservice
