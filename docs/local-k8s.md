@@ -17,9 +17,10 @@ $ docker run -it -p 50051:50051 fortune
 # and goto http://localhost:8080
 ```
 
-#### Really local
+#### Local (no docker)
 
-You need the [rust toolchain](https://rustup.rs/) and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
+If you would like to run everything locally, you need the
+[rust toolchain](https://rustup.rs/) and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
 You also need [getent](https://en.wikipedia.org/wiki/Getent) (for now). On OSX,
 you can put [this file][getent-osx] in your path as the binary.
 
@@ -33,7 +34,7 @@ $ FORTUNE_PATH=/usr/local/bin/fortune RUST_LOG=fortune=info cargo run
 # and goto http://localhost:8080
 ```
 
-## Local Kubernetes
+#### Kind kubernetes cluster
 
 You can setup a local kubernetes on Linux and Mac using [kind][kind]
 
