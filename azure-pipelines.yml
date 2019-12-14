@@ -6,29 +6,31 @@ variables:
   fortune_service_hostname: fortuneservice
   getent_path: /usr/bin/getent
 
-jobs:
-  # frontendservice
-  - template: ci/azure-rustfmt.yml
-    parameters:
-      name: Rustfmt_frontendservice
-      displayName: Rustfmt frontendservice
-      folder: frontendservice
+stages:
+  - stage: Build
+    jobs:
+      # frontendservice
+      - template: ci/azure-rustfmt.yml
+        parameters:
+          name: Rustfmt_frontendservice
+          displayName: Rustfmt frontendservice
+          folder: frontendservice
 
-  - template: ci/azure-build-stable.yml
-    parameters:
-      name: Build_frontendservice
-      displayName: Build frontendservice
-      folder: frontendservice
+      - template: ci/azure-build-stable.yml
+        parameters:
+          name: Build_frontendservice
+          displayName: Build frontendservice
+          folder: frontendservice
 
-  # fortuneservice
-  - template: ci/azure-rustfmt.yml
-    parameters:
-      name: Rustfmt_fortuneservice
-      displayName: Rustfmt fortuneservice
-      folder: fortuneservice
+      # fortuneservice
+      - template: ci/azure-rustfmt.yml
+        parameters:
+          name: Rustfmt_fortuneservice
+          displayName: Rustfmt fortuneservice
+          folder: fortuneservice
 
-  - template: ci/azure-build-stable.yml
-    parameters:
-      name: Build_fortuneservice
-      displayName: Build fortuneservice
-      folder: fortuneservice
+      - template: ci/azure-build-stable.yml
+        parameters:
+          name: Build_fortuneservice
+          displayName: Build fortuneservice
+          folder: fortuneservice
