@@ -25,14 +25,15 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 ## Getting started
 
-Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
-(for Linux, see [CONTRIBUTING][CONTRIBUTING]).
+* Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
+(for Linux or other options in setting up a local cluster,
+ see [local-setup](./docs/local-k8s.md)).
 
-Install [skaffold](https://skaffold.dev/) and run the application
+* Install [skaffold](https://skaffold.dev/) and run the application
 
-```shell
-$ skaffold run --tail
-```
+    ```shell
+    $ skaffold run --tail
+    ```
 
 **QED** - Go to [http://localhost](http://localhost)
 
