@@ -3,7 +3,7 @@
 [![Build Status][azure-badge]][azure-url]
 
 
-**TL;DR** `skaffold run --tail` and go to [localhost](http://localhost)
+**TL;DR** `skaffold run --tail` and go to [http://localhost](http://localhost)
 
 This project is an experiment with how modern web applications would look like
 when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
