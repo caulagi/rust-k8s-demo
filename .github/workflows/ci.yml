@@ -20,7 +20,7 @@ jobs:
         working-directory: frontendservice
         run: |
           rustup component add rustfmt
-          cargo fmt
+          cargo fmt -- --check
   build-fortune:
     name: Check fortuneservice
     runs-on: ubuntu-latest
@@ -37,4 +37,4 @@ jobs:
         working-directory: fortuneservice
         run: |
           rustup component add rustfmt
-          cargo fmt
+          cargo fmt -- --check
