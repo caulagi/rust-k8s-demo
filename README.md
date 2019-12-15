@@ -1,6 +1,6 @@
 # fortune-k8s-demo
 
-[![Build Status][azure-badge]][azure-url]
+[![Build Status][actions-badge]][actions-url]
 
 
 **TL;DR** `skaffold run --tail` and go to [http://localhost](http://localhost)
@@ -42,8 +42,8 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 This project is licensed under [MIT](LICENSE).
 
 
-[azure-badge]: https://dev.azure.com/caulagi/fortune-k8s-demo/_apis/build/status/caulagi.fortune-k8s-demo?branchName=master
-[azure-url]: https://dev.azure.com/caulagi/fortune-k8s-demo/_build/latest?definitionId=1&branchName=master
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
 [CONTRIBUTING]: ./.github/CONTRIBUTING.md
+[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Ffortune-k8s-demo%2Fbadge&style=flat&label=Build%20status
+[actions-url]: https://actions-badge.atrox.dev/caulagi/fortune-k8s-demo/goto
