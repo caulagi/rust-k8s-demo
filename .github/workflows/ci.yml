@@ -8,7 +8,7 @@ jobs:
     name: Check frontendservice
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Build frontendservice
         working-directory: frontendservice
         run: cargo build
@@ -23,7 +23,7 @@ jobs:
     name: Check fortuneservice
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Build fortuneservice
         working-directory: fortuneservice
         run: cargo build
