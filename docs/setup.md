@@ -40,7 +40,7 @@ You can setup a local kubernetes on Linux and Mac using [kind][kind]
 
 ```shell
 $ GO111MODULE="on" go get sigs.k8s.io/kind@v0.6.1
-$ kind create cluster
+$ kind create cluster --config kind-config.yaml
 
 # Required due to https://github.com/GoogleContainerTools/skaffold/issues/3296
 $ kubectl config rename-context "kind-kind" "kind-kind@kind"
