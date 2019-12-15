@@ -45,5 +45,5 @@ This project is licensed under [MIT](LICENSE).
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
 [CONTRIBUTING]: ./.github/CONTRIBUTING.md
-[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Ffortune-k8s-demo%2Fbadge&style=flat
+[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Ffortune-k8s-demo%2Fbadge&style=flat&label=Build%20status
 [actions-url]: https://actions-badge.atrox.dev/caulagi/fortune-k8s-demo/goto
