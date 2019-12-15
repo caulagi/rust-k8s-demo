@@ -1,0 +1,40 @@
+name: Build & test project
+
+on:
+  - push
+
+jobs:
+  build-frontend:
+    name: Check frontendservice
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: docker://rust:1.39-slim-buster
+      - name: Build frontendservice
+        working-directory: frontendservice
+        run: cargo build
+        env:
+          GETENT_PATH: /usr/bin/getent
+          RUST_LOG: frontend=info
+      - name: Check format frontendservice
+        working-directory: frontendservice
+        run: |
+          rustup component add rustfmt
+          cargo fmt -- --check
+  build-fortune:
+    name: Check fortuneservice
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: docker://rust:1.39-slim-buster
+      - name: Build fortuneservice
+        working-directory: fortuneservice
+        run: cargo build
+        env:
+          FORTUNE_PATH: /usr/bin/fortune
+          RUST_LOG: fortune=info
+      - name: Check format fortuneservice
+        working-directory: fortuneservice
+        run: |
+          rustup component add rustfmt
+          cargo fmt -- --check
