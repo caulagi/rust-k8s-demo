@@ -20,14 +20,14 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 - [x] Microservices talking to each other using grpc
 - [x] Local dev setup using skaffold
-- [x] CI (done)/CD (todo)
-- [ ] Service mesh and open tracing (todo)
+- [x] CI
+- [ ] CD
+- [ ] Service mesh and open tracing
 
 ## Getting started
 
 * Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
-(for Linux or other options in setting up a local cluster,
- see [local-setup](./docs/local-k8s.md)).
+(for Linux or other options in getting started, see [setup](./docs/setup.md)).
 
 * Install [skaffold](https://skaffold.dev/) and run the application
 
@@ -44,6 +44,5 @@ This project is licensed under [MIT](LICENSE).
 
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
-[CONTRIBUTING]: ./.github/CONTRIBUTING.md
 [actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Ffortune-k8s-demo%2Fbadge&style=flat&label=Build%20status
 [actions-url]: https://actions-badge.atrox.dev/caulagi/fortune-k8s-demo/goto
