@@ -33,3 +33,33 @@ jobs:
       - name: Check format fortuneservice
         working-directory: fortuneservice
         run: cargo fmt -- --check
+
+  integration-test:
+    name: Integration test
+    needs:
+      - build-frontend
+      - build-fortune
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Install latest version of Kind
+        run: GO111MODULE=on go get sigs.k8s.io/kind
+      - name: Create Kind cluster
+        run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
+      - name: Run sanity test
+        run: kubectl get nodes -o wide
+      - name: Install metallb
+        run: kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
+      - name: Install skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+          chmod +x skaffold
+      - name: Start application
+        run: ./skaffold run
+      - name: Run integration test
+        run: SERVICE_IP=$(kubectl get svc --selector=app=frontend,component=loadbalancer -o json | jq  ".items[0].status.loadBalancer.ingress[0].ip")
+      - run: echo $SERVICE_IP
+      - run: curl -sL -w "%{http_code}\\n" "$SERVICE_IP" -o /dev/null
