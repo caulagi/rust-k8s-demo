@@ -1,0 +1,8 @@
+version: 1
+update_configs:
+  - package_manager: "rust"
+    directory: "/frontendservice"
+    update_schedule: "daily"
+  - package_manager: "rust"
+    directory: "/fortuneservice"
+    update_schedule: "daily"
