@@ -12,3 +12,10 @@ deploy:
   kubectl:
     manifests:
     - ./kubernetes-manifests/**.yaml
+profiles:
+# "github-ci" profile is used to build the images without
+# pushing them.
+- name: github-ci
+  build:
+    local:
+      push: false
