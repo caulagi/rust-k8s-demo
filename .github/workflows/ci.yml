@@ -47,6 +47,7 @@ jobs:
           go-version: 1.13
       - name: Install latest version of Kind
         run: GO111MODULE=on go get sigs.k8s.io/kind
+      - run: PATH=$(go env GOPATH)/bin:$PATH kind version
       - name: Create Kind cluster
         run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
       - name: Install metallb
@@ -55,9 +56,8 @@ jobs:
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
           chmod +x skaffold
-          ./skaffold config set --kube-context kind-kind local-cluster true
       - name: Start application
-        run: ./skaffold run --profile github-ci
+        run: ./skaffold run
       - name: Wait for kubectl rollout status
         run: |
           kubectl rollout status -w deployments/fortuneservice
