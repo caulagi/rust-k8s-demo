@@ -6,6 +6,7 @@ on:
 jobs:
   build-frontend:
     name: Check frontendservice
+    if: "!startsWith(github.event.head_commit.message, '[ci skip]') || !startsWith(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +22,7 @@ jobs:
 
   build-fortune:
     name: Check fortuneservice
+    if: "!startsWith(github.event.head_commit.message, '[ci skip]') || !startsWith(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
