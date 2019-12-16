@@ -1,8 +1,8 @@
 version: 1
 update_configs:
-  - package_manager: "rust"
+  - package_manager: "rust:cargo"
     directory: "/frontendservice"
     update_schedule: "daily"
-  - package_manager: "rust"
+  - package_manager: "rust:cargo"
     directory: "/fortuneservice"
     update_schedule: "daily"
