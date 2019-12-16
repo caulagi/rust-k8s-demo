@@ -48,9 +48,10 @@ jobs:
       - name: Install latest version of Kind
         run: GO111MODULE=on go get sigs.k8s.io/kind
       - name: Create Kind cluster
-        run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
-      - name: Run sanity test
-        run: kubectl get nodes -o wide
+        run: |
+          PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
+          # https://github.com/GoogleContainerTools/skaffold/issues/3296
+          kubectl config rename-context "kind-kind" "kind-kind@kind"
       - name: Install metallb
         run: kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
       - name: Install skaffold
@@ -58,8 +59,12 @@ jobs:
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
           chmod +x skaffold
       - name: Start application
-        run: ./skaffold run
+        run: ./skaffold run --profile github-ci
+      - name: Wait for kubectl rollout status
+        run: |
+          kubectl rollout status -w deployments/fortuneservice
+          kubectl rollout status -w deployments/frontendservice
       - name: Run integration test
-        run: SERVICE_IP=$(kubectl get svc --selector=app=frontend,component=loadbalancer -o json | jq  ".items[0].status.loadBalancer.ingress[0].ip")
-      - run: echo $SERVICE_IP
-      - run: curl -sL -w "%{http_code}\\n" "$SERVICE_IP" -o /dev/null
+        run: |
+          SERVICE_IP=$(kubectl get svc --selector=app=frontend,component=loadbalancer -o json | jq --raw-output ".items[0].status.loadBalancer.ingress[0].ip")
+          test 200 = $(curl -sL -w "%{http_code}\\n" http://$SERVICE_IP -o /dev/null)
