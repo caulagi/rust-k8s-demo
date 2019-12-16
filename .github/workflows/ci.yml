@@ -36,6 +36,7 @@ jobs:
 
   integration-test:
     name: Integration test
+    if: github.ref == 'disabled'
     needs:
       - build-frontend
       - build-fortune
