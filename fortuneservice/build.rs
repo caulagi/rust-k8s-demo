@@ -1,10 +1,5 @@
-extern crate tower_grpc_build;
+use tonic_build::compile_protos;
 
 fn main() {
-    // Build helloworld
-    tower_grpc_build::Config::new()
-        .enable_server(true)
-        .enable_client(false)
-        .build(&["proto/fortune.proto"], &["proto"])
-        .unwrap_or_else(|e| panic!("protobuf compilation failed: {}", e));
+    compile_protos("proto/fortune.proto").unwrap();
 }
