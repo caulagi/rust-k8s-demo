@@ -9,7 +9,7 @@ name = "frontend-server"
 path = "src/main.rs"
 
 [dependencies]
-bytes = "0.4"
+bytes = "0.5"
 futures = "0.1.18"
 http = "0.1"
 log = "0.4"
