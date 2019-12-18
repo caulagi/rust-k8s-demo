@@ -15,7 +15,7 @@ http = "0.1"
 log = "0.4"
 pretty_env_logger = "0.3.1"
 prost = "0.5"
-tokio = "0.1.10"
+tokio = "0.2.4"
 tower = { git = "https://github.com/tower-rs/tower" }
 tower-add-origin = { git = "https://github.com/tower-rs/tower-http" }
 tower-buffer = { git = "https://github.com/tower-rs/tower" }
