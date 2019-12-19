@@ -17,6 +17,12 @@ use fortune::{fortune_client::FortuneClient, FortuneRequest};
 #[derive(Clone, Debug)]
 pub struct Quotation;
 
+#[derive(Debug)]
+struct ServerError;
+
+impl warp::reject::Reject for ServerError {}
+
+
 /// Resolve the hostname (like fortuneservice) to an ip where
 /// the service is running. The result is used both as a string
 /// and IPV4Addr, so returning string is more generic.
@@ -67,7 +73,7 @@ async fn get_fortune() -> Result<std::boxed::Box<std::string::String>, Box<dyn s
     let mut client = FortuneClient::connect(uri).await?;
     let request = tonic::Request::new(FortuneRequest {});
     let response = client.get_random_fortune(request).await?;
-    info!("RESPONSE={:?}", response);
+    debug!("RESPONSE={:?}", response);
     Ok(Box::new(response.into_inner().message.to_string()))
 }
 
@@ -77,11 +83,15 @@ async fn main() {
 
     let routes = warp::any().and_then(|| {
         async move {
-            let msg = get_fortune().await;
-            info!("msg: {:?}", msg);
-            match msg {
-                Ok(val) => Ok::<String, warp::Rejection>(val.to_string()),
-                Err(_) => Ok::<String, warp::Rejection>("error".to_string()),
+            match get_fortune().await {
+                Ok(val) => {
+                    debug!("Got random fortune: {:?}", val);
+                    Ok::<String, warp::Rejection>(val.to_string())
+                },
+                Err(e) => {
+                    error!("ERROR: {:?}", e);
+                    Err(warp::reject::custom(ServerError))
+                }
             }
         }
     });
