@@ -1,7 +1,9 @@
 name: Build & test project
 
 on:
-  - push
+  push:
+  schedule:
+    - cron: "*/5 * * * *"
 
 jobs:
   build-frontend:
