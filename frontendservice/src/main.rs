@@ -31,7 +31,8 @@ fn hostname_to_ip() -> String {
     };
     log::info!(
         "resolving fortuneservice: {}, getent_path: {}",
-        service_hostname, getent_path
+        service_hostname,
+        getent_path
     );
     let child = Command::new(getent_path)
         .args(&["hosts", service_hostname.as_str()])
