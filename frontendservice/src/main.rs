@@ -1,7 +1,3 @@
-extern crate pretty_env_logger;
-#[macro_use]
-extern crate log;
-
 use std::env;
 use std::os::unix::io::AsRawFd;
 use std::os::unix::io::FromRawFd;
@@ -13,9 +9,6 @@ pub mod fortune {
 }
 
 use fortune::{fortune_client::FortuneClient, FortuneRequest};
-
-#[derive(Clone, Debug)]
-pub struct Quotation;
 
 #[derive(Debug)]
 struct ServerError;
@@ -36,7 +29,7 @@ fn hostname_to_ip() -> String {
         Ok(val) => val,
         Err(_) => panic!("Not able to find GETENT_PATH"),
     };
-    info!(
+    log::info!(
         "resolving fortuneservice: {}, getent_path: {}",
         service_hostname, getent_path
     );
@@ -45,12 +38,12 @@ fn hostname_to_ip() -> String {
         .stdout(Stdio::piped())
         .spawn()
         .expect("should resolve");
-    debug!("{:?}", child);
+    log::debug!("{:?}", child);
     let out = match child.stdout {
         Some(stdout) => stdout,
         None => panic!("getent failed"),
     };
-    debug!("{:?}", out);
+    log::debug!("{:?}", out);
     let stdio = unsafe { Stdio::from_raw_fd(out.as_raw_fd()) };
     let first_ip = Command::new("head")
         .args(&["-1"])
@@ -63,7 +56,7 @@ fn hostname_to_ip() -> String {
         Some(x) => x,
         None => panic!("No ip"),
     };
-    info!("{} resolved to {:?}", service_hostname, ip);
+    log::info!("{} resolved to {:?}", service_hostname, ip);
     ip.to_string()
 }
 
@@ -72,7 +65,7 @@ async fn get_fortune() -> Result<std::boxed::Box<std::string::String>, Box<dyn s
     let mut client = FortuneClient::connect(uri).await?;
     let request = tonic::Request::new(FortuneRequest {});
     let response = client.get_random_fortune(request).await?;
-    debug!("RESPONSE={:?}", response);
+    log::debug!("RESPONSE={:?}", response);
     Ok(Box::new(response.into_inner().message.to_string()))
 }
 
@@ -84,11 +77,11 @@ async fn main() {
         async move {
             match get_fortune().await {
                 Ok(val) => {
-                    debug!("Got random fortune: {:?}", val);
+                    log::debug!("Got random fortune: {:?}", val);
                     Ok::<String, warp::Rejection>(val.to_string())
                 }
                 Err(e) => {
-                    error!("ERROR: {:?}", e);
+                    log::error!("ERROR: {:?}", e);
                     Err(warp::reject::custom(ServerError))
                 }
             }
