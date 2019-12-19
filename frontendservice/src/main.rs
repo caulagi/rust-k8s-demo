@@ -22,7 +22,6 @@ struct ServerError;
 
 impl warp::reject::Reject for ServerError {}
 
-
 /// Resolve the hostname (like fortuneservice) to an ip where
 /// the service is running. The result is used both as a string
 /// and IPV4Addr, so returning string is more generic.
@@ -87,7 +86,7 @@ async fn main() {
                 Ok(val) => {
                     debug!("Got random fortune: {:?}", val);
                     Ok::<String, warp::Rejection>(val.to_string())
-                },
+                }
                 Err(e) => {
                     error!("ERROR: {:?}", e);
                     Err(warp::reject::custom(ServerError))
