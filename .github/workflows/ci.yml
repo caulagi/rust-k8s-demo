@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Show rust version
+        working-directory: frontendservice
+        run: cargo version
       - name: Build frontendservice
         working-directory: frontendservice
         run: cargo build
@@ -26,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Show rust version
+        working-directory: frontendservice
+        run: cargo version
       - name: Build fortuneservice
         working-directory: fortuneservice
         run: cargo build
