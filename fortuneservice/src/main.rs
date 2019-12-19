@@ -1,7 +1,7 @@
-#[macro_use]
-extern crate log;
 use std::process::Command;
+
 use tonic::{transport::Server, Request, Response, Status};
+
 pub mod fortune {
     tonic::include_proto!("fortune");
 }
@@ -20,7 +20,7 @@ impl Fortune for MyFortune {
         &self,
         request: Request<FortuneRequest>,
     ) -> Result<Response<FortuneResponse>, Status> {
-        info!("REQUEST = {:?}", request);
+        log::info!("REQUEST = {:?}", request);
         let cookie = Command::new(env!("FORTUNE_PATH"))
             .output()
             .expect("failed to execute process");
@@ -44,6 +44,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .serve(addr)
         .await?;
 
-    info!("Starting fortuneservice: {:?}", addr);
     Ok(())
 }
