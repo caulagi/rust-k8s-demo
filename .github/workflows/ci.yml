@@ -20,6 +20,7 @@ jobs:
           GETENT_PATH: /usr/bin/getent
           RUST_LOG: frontend=info
       - name: Check format frontendservice
+        working-directory: frontendservice
         run: cargo fmt -- --check
 
   build-fortune:
