@@ -20,13 +20,11 @@ $ docker run -it -p 50051:50051 fortune
 #### Local (no docker)
 
 If you would like to run everything locally, you need the
-[rust toolchain](https://rustup.rs/) and [fortune](https://en.wikipedia.org/wiki/Fortune_%28Unix%29), of course.
-You also need [getent](https://en.wikipedia.org/wiki/Getent) (for now). On OSX,
-you can put [this file][getent-osx] in your path as the binary.
+[rust toolchain](https://rustup.rs/) and [fortune][fortune], of course.
 
 ```shell
 $ cd frontendservice
-$ FORTUNE_SERVICE_HOSTNAME=localhost GETENT_PATH=~/bin/getent RUST_LOG=frontend=info cargo run
+$ FORTUNE_SERVICE_HOSTNAME=localhost RUST_LOG=frontend=info cargo run
 
 $ cd fortuneservice
 $ FORTUNE_PATH=/usr/local/bin/fortune RUST_LOG=fortune=info cargo run
@@ -52,5 +50,5 @@ $ skaffold run
 $ kubectl get pods --selector app=frontendservice -o json | jq  ".items[0].metadata.name" | xargs -I % kubectl port-forward pod/% 8080
 ```
 
-[getent-osx]: https://github.com/petere/getent-osx/blob/master/getent
 [kind]: https://github.com/kubernetes-sigs/kind
+[fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29

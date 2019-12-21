@@ -1,74 +1,48 @@
-extern crate futures;
-extern crate pretty_env_logger;
-#[macro_use]
-extern crate log;
-extern crate prost;
-extern crate tokio;
-extern crate tower_grpc;
-extern crate tower_h2;
-
-use fortune::{server, FortuneRequest, FortuneResponse};
-
-use futures::{future, Future, Stream};
 use std::process::Command;
-use tokio::executor::DefaultExecutor;
-use tokio::net::TcpListener;
-use tower_grpc::{Request, Response};
-use tower_h2::Server;
+
+use tonic::{transport::Server, Request, Response, Status};
 
 pub mod fortune {
-    include!(concat!(env!("OUT_DIR"), "/fortune.rs"));
+    tonic::include_proto!("fortune");
 }
 
-#[derive(Clone, Debug)]
-struct Service;
+use fortune::{
+    fortune_server::{Fortune, FortuneServer},
+    FortuneRequest, FortuneResponse,
+};
 
-impl server::Fortune for Service {
-    type GetRandomFortuneFuture =
-        future::FutureResult<Response<FortuneResponse>, tower_grpc::Status>;
+#[derive(Default)]
+pub struct MyFortune {}
 
-    fn get_random_fortune(
-        &mut self,
+#[tonic::async_trait]
+impl Fortune for MyFortune {
+    async fn get_random_fortune(
+        &self,
         request: Request<FortuneRequest>,
-    ) -> Self::GetRandomFortuneFuture {
-        info!("REQUEST = {:?}", request);
+    ) -> Result<Response<FortuneResponse>, Status> {
+        log::info!("REQUEST = {:?}", request);
         let cookie = Command::new(env!("FORTUNE_PATH"))
             .output()
             .expect("failed to execute process");
-        let response = Response::new(FortuneResponse {
+        let response = fortune::FortuneResponse {
             message: String::from_utf8_lossy(&cookie.stdout).to_string(),
-        });
+        };
 
-        future::ok(response)
+        Ok(Response::new(response))
     }
 }
 
-pub fn main() {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();
 
-    let mut h2 = Server::new(
-        server::FortuneServer::new(Service),
-        Default::default(),
-        DefaultExecutor::current(),
-    );
-
     let addr = "0.0.0.0:50051".parse().unwrap();
-    let bind = TcpListener::bind(&addr).expect("bind");
+    let fortuner = MyFortune::default();
 
-    let serve = bind
-        .incoming()
-        .for_each(move |sock| {
-            if let Err(e) = sock.set_nodelay(true) {
-                return Err(e);
-            }
+    Server::builder()
+        .add_service(FortuneServer::new(fortuner))
+        .serve(addr)
+        .await?;
 
-            let serve = h2.serve(sock);
-            tokio::spawn(serve.map_err(|e| error!("h2 error: {:?}", e)));
-
-            Ok(())
-        })
-        .map_err(|e| eprintln!("accept error: {}", e));
-
-    info!("Starting fortuneservice: {:?}", addr);
-    tokio::run(serve)
+    Ok(())
 }

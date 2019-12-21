@@ -5,6 +5,9 @@ ENV FORTUNE_PATH /usr/games/fortune
 
 COPY . /code
 WORKDIR /code
+
+# required for tonic-build
+RUN rustup component add rustfmt
 RUN cargo build
 
 # RUN GRPC_HEALTH_PROBE_VERSION=v0.2.1 && \

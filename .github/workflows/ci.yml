@@ -1,14 +1,20 @@
 name: Build & test project
 
 on:
-  - push
+  push:
+  schedule:
+    - cron: "0 6 * * *"
 
 jobs:
   build-frontend:
     name: Check frontendservice
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Show rust version
+        working-directory: frontendservice
+        run: cargo version
       - name: Build frontendservice
         working-directory: frontendservice
         run: cargo build
@@ -21,9 +27,13 @@ jobs:
 
   build-fortune:
     name: Check fortuneservice
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Show rust version
+        working-directory: frontendservice
+        run: cargo version
       - name: Build fortuneservice
         working-directory: fortuneservice
         run: cargo build
@@ -36,6 +46,7 @@ jobs:
 
   integration-test:
     name: Integration test
+    if: "!contains(github.event.head_commit.message, 'e2e skip') && !contains(github.event.head_commit.message, 'skip e2e')"
     needs:
       - build-frontend
       - build-fortune
