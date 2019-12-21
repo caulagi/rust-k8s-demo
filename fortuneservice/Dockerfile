@@ -1,4 +1,4 @@
-FROM rust:1.39.0-slim-buster as build
+FROM rust:1.40.0-slim-buster as build
 
 ENV RUST_LOG fortune=info
 ENV FORTUNE_PATH /usr/games/fortune
