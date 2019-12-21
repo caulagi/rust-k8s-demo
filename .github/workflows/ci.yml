@@ -61,9 +61,7 @@ jobs:
       - name: Create Kind cluster
         run: |
           PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
-          # https://github.com/GoogleContainerTools/skaffold/issues/3296
-          kubectl config rename-context "kind-kind" "kind-kind@kind"
-      - run: kind version
+      - run: PATH=$(go env GOPATH)/bin:$PATH kind version
       - name: Install metallb
         run: kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
       - name: Install skaffold
