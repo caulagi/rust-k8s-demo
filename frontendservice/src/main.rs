@@ -1,8 +1,8 @@
 use std::env;
+use std::io;
 
-use trust_dns_resolver::Resolver;
+use tokio::net;
 use warp::Filter;
-
 pub mod fortune {
     tonic::include_proto!("fortune");
 }
@@ -16,20 +16,22 @@ impl warp::reject::Reject for ServerError {}
 
 /// Resolve the hostname (like fortuneservice) to an ip where
 /// the service is running.
-fn hostname_to_ip(name: &str) -> String {
-    let resolver = Resolver::from_system_conf().unwrap();
-    let response = resolver.lookup_ip(name).unwrap();
-    let address = response.iter().next().expect("no addresses returned!");
+async fn hostname_to_ip(name: &str) -> io::Result<String> {
+    let address = net::lookup_host(name).await?.next().unwrap();
     log::debug!("{} resolved to {:?}", name, address);
-    address.to_string()
+    Ok(address.to_string())
 }
 
-async fn get_fortune() -> Result<std::boxed::Box<std::string::String>, Box<dyn std::error::Error>> {
+async fn get_fortune() -> Result<Box<String>, Box<dyn std::error::Error>> {
     let service_hostname = match env::var("FORTUNE_SERVICE_HOSTNAME") {
-        Ok(val) => val,
+        Ok(val) => format!("{}:50051", val),
         Err(_) => panic!("Not able to find FORTUNE_SERVICE_HOSTNAME"),
     };
-    let uri = format!("http://{}:50051", hostname_to_ip(&service_hostname));
+    let address = hostname_to_ip(&service_hostname).await;
+    let uri = match address {
+        Ok(val) => format!("http://{}", val),
+        Err(_) => panic!("Unable to resolve fortune service"),
+    };
     let mut client = FortuneClient::connect(uri).await?;
     let request = tonic::Request::new(FortuneRequest {});
     let response = client.get_random_fortune(request).await?;
