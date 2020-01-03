@@ -13,11 +13,13 @@ bytes = "0.4"
 log = "0.4"
 pretty_env_logger = "0.3.1"
 prost = "0.5"
-tokio = { version = "0.2", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
+tokio = { git = "https://github.com/tokio-rs/tokio", features = ["rt-threaded", "dns", "macros"] }
 tonic = { git = "https://github.com/hyperium/tonic", features = ["tls"] }
-trust-dns-resolver = { version = "0.12" }
 # TODO: disable default-features
 warp = { git = "https://github.com/seanmonstar/warp" }
 
 [build-dependencies]
 tonic-build = { git = "https://github.com/hyperium/tonic" }
+
+[patch.crates-io]
+tokio = { git = "https://github.com/tokio-rs/tokio" }
