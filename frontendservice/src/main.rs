@@ -64,7 +64,7 @@ async fn main() {
         }
     });
 
-    let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+    let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
     log::info!("Frontend service starting on {:?}", addr);
     warp::serve(routes).run(addr).await;
 }
