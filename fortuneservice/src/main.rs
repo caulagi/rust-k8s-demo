@@ -36,9 +36,10 @@ impl Fortune for MyFortune {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();
 
-    let addr = "0.0.0.0:50051".parse().unwrap();
+    let addr = "127.0.0.1:50051".parse().unwrap();
     let fortuner = MyFortune::default();
 
+    log::info!("Fortune service running on {:?}", addr);
     Server::builder()
         .add_service(FortuneServer::new(fortuner))
         .serve(addr)
