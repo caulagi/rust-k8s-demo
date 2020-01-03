@@ -17,9 +17,14 @@ impl warp::reject::Reject for ServerError {}
 /// Resolve the hostname (like fortuneservice) to an ip where
 /// the service is running.
 async fn hostname_to_ip(name: &str) -> io::Result<String> {
-    let address = net::lookup_host(name).await?.next().unwrap();
-    log::debug!("{} resolved to {:?}", name, address);
-    Ok(address.to_string())
+    for addr in net::lookup_host(name).await? {
+        if addr.is_ipv4() {
+            log::debug!("{} resolved to {:?}", name, addr);
+            return Ok(addr.to_string());
+        }
+    }
+
+    panic!("Not able to lookup name")
 }
 
 async fn get_fortune() -> Result<Box<String>, Box<dyn std::error::Error>> {
