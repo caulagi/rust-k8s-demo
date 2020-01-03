@@ -1,5 +1,6 @@
 use std::env;
 use std::io;
+use std::net::SocketAddr;
 
 use tokio::net;
 use warp::Filter;
@@ -63,5 +64,7 @@ async fn main() {
         }
     });
 
-    warp::serve(routes).run(([0, 0, 0, 0], 8080)).await;
+    let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
+    log::info!("Frontend service starting on {:?}", addr);
+    warp::serve(routes).run(addr).await;
 }

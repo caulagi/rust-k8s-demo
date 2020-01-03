@@ -39,6 +39,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:50051".parse().unwrap();
     let fortuner = MyFortune::default();
 
+    log::info!("Fortune service starting on {:?}", addr);
     Server::builder()
         .add_service(FortuneServer::new(fortuner))
         .serve(addr)
