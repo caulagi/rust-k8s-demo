@@ -20,3 +20,6 @@ warp = { git = "https://github.com/seanmonstar/warp" }
 
 [build-dependencies]
 tonic-build = { git = "https://github.com/hyperium/tonic" }
+
+[patch.crates-io]
+tokio = { git = "https://github.com/tokio-rs/tokio" }
