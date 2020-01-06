@@ -1283,7 +1283,7 @@ dependencies = [
 [[package]]
 name = "tokio"
 version = "0.2.6"
-source = "git+https://github.com/tokio-rs/tokio#efcbf9613f2d5048550f9c828e3be422644f1391"
+source = "git+https://github.com/tokio-rs/tokio#32e15b3a24ac177c92a78eb04e233534583eae17"
 dependencies = [
  "bytes 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "fnv 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1301,7 +1301,7 @@ dependencies = [
 [[package]]
 name = "tokio-macros"
 version = "0.2.1"
-source = "git+https://github.com/tokio-rs/tokio#efcbf9613f2d5048550f9c828e3be422644f1391"
+source = "git+https://github.com/tokio-rs/tokio#32e15b3a24ac177c92a78eb04e233534583eae17"
 dependencies = [
  "quote 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "syn 1.0.13 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1703,7 +1703,7 @@ dependencies = [
 [[package]]
 name = "warp"
 version = "0.2.0-alpha.0"
-source = "git+https://github.com/seanmonstar/warp#21b8f577bf9b6a6c3a23c6dadfcf08cd594b326f"
+source = "git+https://github.com/seanmonstar/warp#e94309e274872efed34e2a80f1e4553a45963510"
 dependencies = [
  "bytes 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
