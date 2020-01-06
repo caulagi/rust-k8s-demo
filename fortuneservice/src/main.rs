@@ -1,5 +1,4 @@
-use std::process::Command;
-
+use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
 
 pub mod fortune {
@@ -20,12 +19,32 @@ impl Fortune for MyFortune {
         &self,
         request: Request<FortuneRequest>,
     ) -> Result<Response<FortuneResponse>, Status> {
-        log::info!("REQUEST = {:?}", request);
-        let cookie = Command::new(env!("FORTUNE_PATH"))
-            .output()
-            .expect("failed to execute process");
+        log::debug!("REQUEST = {:?}", request);
+        // Connect to the database.
+        let (client, connection) =
+            tokio_postgres::connect("host=localhost user=postgres password=1234", NoTls)
+                .await
+                .unwrap();
+
+        // The connection object performs the actual communication with the database,
+        // so spawn it off to run on its own.
+        tokio::spawn(async move {
+            if let Err(e) = connection.await {
+                eprintln!("connection error: {}", e);
+            }
+        });
+
+        let rows = client
+            .query(
+                "SELECT content, author FROM quotation OFFSET floor(random() * 36937) LIMIT 1;",
+                &[],
+            )
+            .await
+            .unwrap();
+
+        let value: &str = rows[0].get(0);
         let response = fortune::FortuneResponse {
-            message: String::from_utf8_lossy(&cookie.stdout).to_string(),
+            message: value.to_string(),
         };
 
         Ok(Response::new(response))

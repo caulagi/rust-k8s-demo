@@ -1,8 +1,8 @@
 # Fortune service
 
-A grpc server that calls the local 'fortune' binary and returns
+A grpc server that gets a random 'fortune' from database and returns
 the response. Run as -
 
 ```shell
-$ FORTUNE_PATH=/usr/local/bin/fortune RUST_LOG=fortune=info cargo run
+$ RUST_LOG=fortune=debug cargo run
 ```
