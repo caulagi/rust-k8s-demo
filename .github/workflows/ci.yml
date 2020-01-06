@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Show rust version
-        working-directory: frontendservice
-        run: cargo version
+      - name: Update rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+          profile: minimal
+          override: true
       - name: Build frontendservice
         working-directory: frontendservice
         run: cargo build
@@ -31,9 +35,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Show rust version
-        working-directory: frontendservice
-        run: cargo version
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+          profile: minimal
+          override: true
       - name: Build fortuneservice
         working-directory: fortuneservice
         run: cargo build
