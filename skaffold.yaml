@@ -2,12 +2,12 @@ apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
+  - image: databaseservice
+    context: databaseservice
   - image: fortuneservice
     context: fortuneservice
   - image: frontendservice
     context: frontendservice
-  - image: databaseservice
-    context: databaseservice
   tagPolicy:
     gitCommit: {}
 deploy:
