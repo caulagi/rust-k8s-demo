@@ -1,15 +1,17 @@
-# fortune-k8s-demo
+# rust-k8s-demo
 
 [![Build Status][actions-badge]][actions-url]
+
+![architecture][architecture]
 
 This project is an experiment with how modern web applications would look like
 when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
 
-It is a simple web application that returns a new [fortune cookie][fortune] for each request.
+It is a simple web application that returns a new quotation for each request.
 
 There are two isolated microservices. The frontendservice provides one endpoint
 that clients (browsers) can connect to. The fortuneservice is a [grpc](https://grpc.io/) server,
-that answers with 'fortune cookies' for each request. Both the microservices
+that answers with a quotation for each request. Both the microservices
 use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/).
 
 
@@ -33,7 +35,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
     $ skaffold run --tail
     ```
 
-**QED** - Go to [http://localhost](http://localhost)
+* **QED** - Go to [http://localhost](http://localhost)
 
 ## LICENSE
 
@@ -41,6 +43,6 @@ This project is licensed under [MIT](LICENSE).
 
 
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
-[fortune]: https://en.wikipedia.org/wiki/Fortune_%28Unix%29
-[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Ffortune-k8s-demo%2Fbadge&style=flat&label=Build%20status
-[actions-url]: https://actions-badge.atrox.dev/caulagi/fortune-k8s-demo/goto
+[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Frust-k8s-demo%2Fbadge&style=flat&label=Build%20status
+[actions-url]: https://actions-badge.atrox.dev/caulagi/rust-k8s-demo/goto
+[architecture]: https://user-images.githubusercontent.com/222507/72002857-89411780-3248-11ea-9e16-9e6912f2a75b.png
