@@ -28,8 +28,8 @@ jobs:
         working-directory: frontendservice
         run: cargo fmt -- --check
 
-  build-fortune:
-    name: Check fortuneservice
+  build-quotation:
+    name: Check quotationservice
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
@@ -41,13 +41,13 @@ jobs:
           components: rustfmt
           profile: minimal
           override: true
-      - name: Build fortuneservice
-        working-directory: fortuneservice
+      - name: Build quotationservice
+        working-directory: quotationservice
         run: cargo build
         env:
-          RUST_LOG: fortune=info
-      - name: Check format fortuneservice
-        working-directory: fortuneservice
+          RUST_LOG: quotation=info
+      - name: Check format quotationservice
+        working-directory: quotationservice
         run: cargo fmt -- --check
 
   integration-test:
@@ -80,7 +80,7 @@ jobs:
       - name: Wait for kubectl rollout status
         run: |
           kubectl rollout status --timeout 2m -w deployments/postgres-deployment
-          kubectl rollout status --timeout 2m -w deployments/fortuneservice
+          kubectl rollout status --timeout 2m -w deployments/quotationservice
           kubectl rollout status --timeout 2m -w deployments/frontendservice
       - name: Run integration test
         run: |

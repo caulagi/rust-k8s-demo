@@ -4,8 +4,8 @@ build:
   artifacts:
   - image: databaseservice
     context: databaseservice
-  - image: fortuneservice
-    context: fortuneservice
+  - image: quotationservice
+    context: quotationservice
   - image: frontendservice
     context: frontendservice
   tagPolicy:

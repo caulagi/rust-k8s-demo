@@ -10,7 +10,7 @@ when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo
 It is a simple web application that returns a new quotation for each request.
 
 There are two isolated microservices. The frontendservice provides one endpoint
-that clients (browsers) can connect to. The fortuneservice is a [grpc](https://grpc.io/) server,
+that clients (browsers) can connect to. The quotationservice is a [grpc](https://grpc.io/) server,
 that answers with a quotation for each request. Both the microservices
 use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/).
 

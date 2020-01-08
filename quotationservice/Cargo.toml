@@ -1,5 +1,5 @@
 [package]
-name = "fortune-server"
+name = "quotation-server"
 version = "0.1.0"
 authors = ["Pradip Caulagi <caulagi@gmail.com>"]
 edition = "2018"
@@ -7,7 +7,7 @@ edition = "2018"
 license = "MIT"
 
 [[bin]]
-name = "fortune-server"
+name = "quotation-server"
 path = "src/main.rs"
 
 [dependencies]
