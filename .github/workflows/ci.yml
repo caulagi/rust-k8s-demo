@@ -61,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          lfs: true
       - uses: actions/setup-go@v1
         with:
           go-version: 1.13
@@ -76,12 +78,15 @@ jobs:
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
           chmod +x skaffold
       - run: ./skaffold version
+      - name: Create postgres password
+        run: kubectl create secret generic postgres-password --from-literal=pgpassword=panda
       - name: Start application
         run: ./skaffold run
       - name: Wait for kubectl rollout status
         run: |
-          kubectl rollout status -w deployments/fortuneservice
-          kubectl rollout status -w deployments/frontendservice
+          kubectl rollout status --timeout 2m -w deployments/postgres-deployment
+          kubectl rollout status --timeout 2m -w deployments/fortuneservice
+          kubectl rollout status --timeout 2m -w deployments/frontendservice
       - name: Run integration test
         run: |
           SERVICE_IP=$(kubectl get svc --selector=app=frontend,component=loadbalancer -o json | jq --raw-output ".items[0].status.loadBalancer.ingress[0].ip")

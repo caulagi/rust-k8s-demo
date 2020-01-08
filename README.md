@@ -2,9 +2,6 @@
 
 [![Build Status][actions-badge]][actions-url]
 
-
-**TL;DR** `skaffold run --tail` and go to [http://localhost](http://localhost)
-
 This project is an experiment with how modern web applications would look like
 when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
 
@@ -32,6 +29,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 * Install [skaffold](https://skaffold.dev/) and run the application
 
     ```shell
+    $ kubectl create secret generic postgres-password --from-literal=pgpassword=1234
     $ skaffold run --tail
     ```
 

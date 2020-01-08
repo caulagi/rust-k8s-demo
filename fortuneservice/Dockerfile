@@ -1,8 +1,5 @@
 FROM rust:1.40.0-slim-buster as build
 
-ENV RUST_LOG fortune=info
-ENV FORTUNE_PATH /usr/games/fortune
-
 COPY . /code
 WORKDIR /code
 
@@ -17,12 +14,4 @@ EXPOSE 50051
 
 FROM debian:buster-slim
 COPY --from=build /code/target/debug/fortune-server /usr/local/bin/fortune-server
-RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-        fortunes \
-        fortune-mod \
-    ; \
-    rm -rf /var/lib/apt/lists/*;
-
 ENTRYPOINT ["/usr/local/bin/fortune-server"]

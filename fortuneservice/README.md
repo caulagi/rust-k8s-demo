@@ -1,6 +1,6 @@
 # Fortune service
 
-A grpc server that gets a random 'fortune' from database and returns
+A grpc server that gets a random quotation from database and returns
 the response. Run as -
 
 ```shell
