@@ -13,9 +13,9 @@ for setting up the project locally.
 $ docker build -t frontend frontendservice
 $ docker build -t quotation quotationservice
 
-# for linux: FORTUNE_SERVICE_HOSTNAME=localhost
-$ docker run -it -p 8080:8080 -e FORTUNE_SERVICE_HOSTNAME=docker.for.mac.localhost frontend
-$ docker run -it -p 50051:50051 quotation
+# for linux: use localhost instead of docker.for.mac.localhost
+$ docker run -it -p 8080:8080 -e QUOTATION_SERVICE_HOSTNAME=docker.for.mac.localhost frontend
+$ docker run -it -p 50051:50051 -e POSTGRES_SERVICE=docker.for.mac.localhost -e POSTGRES_PASSWORD=1234 quotation
 
 # and goto http://localhost:8080
 ```
@@ -23,14 +23,14 @@ $ docker run -it -p 50051:50051 quotation
 #### Local (no docker)
 
 If you would like to run everything locally, you need the
-[rust toolchain](https://rustup.rs/) and [quotation][quotation], of course.
+[rust toolchain](https://rustup.rs/), of course.
 
 ```shell
 $ cd frontendservice
-$ FORTUNE_SERVICE_HOSTNAME=localhost RUST_LOG=frontend=info cargo run
+$ QUOTATION_SERVICE_HOSTNAME=localhost RUST_LOG=frontend=info cargo run
 
 $ cd quotationservice
-$ FORTUNE_PATH=/usr/local/bin/quotation RUST_LOG=quotation=info cargo run
+$ RUST_LOG=quotation=info POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 cargo run
 
 # and goto http://localhost:8080
 ```
@@ -54,4 +54,3 @@ $ kubectl get pods --selector app=frontendservice -o json | jq  ".items[0].metad
 ```
 
 [kind]: https://github.com/kubernetes-sigs/kind
-[quotation]: https://en.wikipedia.org/wiki/Quotation_%28Unix%29
