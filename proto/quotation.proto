@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "QuotationProto";
+
+package quotation;
+
+// The Quotation service definition.
+service Quotation {
+  // Get a random Quotation
+  rpc GetRandomQuotation (QuotationRequest) returns (QuotationResponse) {}
+}
+
+// Request to get a random Quotation
+message QuotationRequest {
+}
+
+// The response message containing a random Quotation
+message QuotationResponse {
+  string message = 1;
+}

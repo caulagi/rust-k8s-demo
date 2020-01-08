@@ -13,5 +13,5 @@ RUN cargo build
 EXPOSE 50051
 
 FROM debian:buster-slim
-COPY --from=build /code/target/debug/fortune-server /usr/local/bin/fortune-server
-ENTRYPOINT ["/usr/local/bin/fortune-server"]
+COPY --from=build /code/target/debug/quotation-server /usr/local/bin/quotation-server
+ENTRYPOINT ["/usr/local/bin/quotation-server"]

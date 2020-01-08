@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fortuneservice
+  name: quotationservice
 spec:
   selector:
     matchLabels:
-      app: fortuneservice
+      app: quotationservice
   template:
     metadata:
       labels:
-        app: fortuneservice
+        app: quotationservice
     spec:
       terminationGracePeriodSeconds: 5
       containers:
-        - name: fortuneservice
-          image: fortuneservice
+        - name: quotationservice
+          image: quotationservice
           ports:
             - containerPort: 50051
           resources:
@@ -26,7 +26,7 @@ spec:
               memory: 300Mi
           env:
             - name: RUST_LOG
-              value: fortune=debug
+              value: quotation=debug
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -48,11 +48,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: fortuneservice
+  name: quotationservice
 spec:
   type: ClusterIP
   selector:
-    app: fortuneservice
+    app: quotationservice
   ports:
     - name: grpc
       port: 50051

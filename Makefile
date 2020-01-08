@@ -1,7 +1,7 @@
 PHONY: update-proto
 update-proto: # Update protobuf definitions for all microservices
-	cp proto/fortune.proto fortuneservice/proto
-	cp proto/fortune.proto frontendservice/proto
+	cp proto/quotation.proto quotationservice/proto
+	cp proto/quotation.proto frontendservice/proto
 
 
 .PHONY: help

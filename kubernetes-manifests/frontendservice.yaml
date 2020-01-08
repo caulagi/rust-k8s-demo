@@ -28,8 +28,8 @@ spec:
             path: "/"
             port: 8080
         env:
-        - name: FORTUNE_SERVICE_HOSTNAME
-          value: "fortuneservice"
+        - name: QUOTATION_SERVICE_HOSTNAME
+          value: "quotationservice"
         - name: RUST_LOG
           value: frontend=debug
         resources:
