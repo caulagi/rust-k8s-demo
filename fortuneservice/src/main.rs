@@ -1,3 +1,5 @@
+use std::env;
+
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
 
@@ -20,11 +22,15 @@ impl Fortune for MyFortune {
         request: Request<FortuneRequest>,
     ) -> Result<Response<FortuneResponse>, Status> {
         log::debug!("REQUEST = {:?}", request);
+        let connect_params = format!(
+            "host={} user=postgres password={}",
+            env::var("POSTGRES_SERVICE").unwrap(),
+            env::var("POSTGRES_PASSWORD").unwrap()
+        );
         // Connect to the database.
-        let (client, connection) =
-            tokio_postgres::connect("host=localhost user=postgres password=1234", NoTls)
-                .await
-                .unwrap();
+        let (client, connection) = tokio_postgres::connect(connect_params.as_str(), NoTls)
+            .await
+            .unwrap();
 
         // The connection object performs the actual communication with the database,
         // so spawn it off to run on its own.

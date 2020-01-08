@@ -1,5 +1,8 @@
 # Setting up kubernetes and local development
 
+**Preparation (required)**: You need to have a postgres database with some quotations loaded.
+You can follow the instructions at https://github.com/caulagi/postgres-quotation.
+
 You can also **choose one of the options below** (they all do the same thing)
 for setting up the project locally.
 

@@ -6,6 +6,8 @@ build:
     context: fortuneservice
   - image: frontendservice
     context: frontendservice
+  - image: databaseservice
+    context: databaseservice
   tagPolicy:
     gitCommit: {}
 deploy:
