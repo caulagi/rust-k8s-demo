@@ -76,7 +76,7 @@ jobs:
       - name: Create postgres password
         run: kubectl create secret generic postgres-password --from-literal=pgpassword=panda
       - name: Start application
-        run: ./skaffold run
+        run: ./skaffold -v debug run
       - name: Wait for kubectl rollout status
         run: |
           kubectl rollout status --timeout 2m -w deployments/postgres-deployment
