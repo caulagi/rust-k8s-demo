@@ -40,8 +40,11 @@ $ RUST_LOG=quotation=info POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 carg
 You can setup a local kubernetes on Linux and Mac using [kind][kind]
 
 ```shell
-$ GO111MODULE="on" go get sigs.k8s.io/kind@v0.6.1
+$ GO111MODULE="on" go get sigs.k8s.io/kind@v0.7.0
 $ kind create cluster --config kind-config.yaml
+
+$ kubectl create secret generic postgres-password --from-literal=pgpassword=panda
+$ kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
 
 # Run services
 $ skaffold run
