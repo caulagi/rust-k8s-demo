@@ -49,17 +49,15 @@ async fn get_quotation() -> Result<Box<String>, Box<dyn std::error::Error>> {
 async fn main() {
     pretty_env_logger::init();
 
-    let routes = warp::any().and_then(|| {
-        async move {
-            match get_quotation().await {
-                Ok(val) => {
-                    log::debug!("Got random quotation: {:?}", val);
-                    Ok::<String, warp::Rejection>(val.to_string())
-                }
-                Err(e) => {
-                    log::error!("ERROR: {:?}", e);
-                    Err(warp::reject::custom(ServerError))
-                }
+    let routes = warp::any().and_then(|| async move {
+        match get_quotation().await {
+            Ok(val) => {
+                log::debug!("Got random quotation: {:?}", val);
+                Ok::<String, warp::Rejection>(val.to_string())
+            }
+            Err(e) => {
+                log::error!("ERROR: {:?}", e);
+                Err(warp::reject::custom(ServerError))
             }
         }
     });
