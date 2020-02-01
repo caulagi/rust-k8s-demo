@@ -4,10 +4,6 @@ build:
   artifacts:
   - image: databaseservice
     context: databaseservice
-  - image: quotationservice
-    context: quotationservice
-  - image: frontendservice
-    context: frontendservice
 deploy:
   kubectl:
     manifests:
