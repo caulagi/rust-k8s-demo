@@ -8,8 +8,6 @@ build:
     context: quotationservice
   - image: frontendservice
     context: frontendservice
-  tagPolicy:
-    gitCommit: {}
 deploy:
   kubectl:
     manifests:
