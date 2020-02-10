@@ -293,6 +293,7 @@ checksum = "b6f16056ecbb57525ff698bb955162d0cd03bee84e6241c27ff75c08d8ca5987"
 dependencies = [
  "futures-channel",
  "futures-core",
+ "futures-executor",
  "futures-io",
  "futures-sink",
  "futures-task",
@@ -316,10 +317,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79564c427afefab1dfb3298535b21eda083ef7935b4f0ecbfcb121f0aec10866"
 
 [[package]]
+name = "futures-executor"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e274736563f686a837a0568b478bdabfeaec2dca794b5649b04e2fe1627c231"
+dependencies = [
+ "futures-core",
+ "futures-task",
+ "futures-util",
+]
+
+[[package]]
 name = "futures-io"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e676577d229e70952ab25f3945795ba5b16d63ca794ca9d2c860e5595d20b5ff"
+
+[[package]]
+name = "futures-macro"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a5081aa3de1f7542a794a397cde100ed903b0630152d0973479018fd85423a7"
+dependencies = [
+ "proc-macro-hack",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "futures-sink"
@@ -339,10 +363,17 @@ version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0d66274fb76985d3c62c886d1da7ac4c0903a8c9f754e8fe0f35a6a6cc39e76"
 dependencies = [
+ "futures-channel",
  "futures-core",
+ "futures-io",
+ "futures-macro",
  "futures-sink",
  "futures-task",
+ "memchr",
  "pin-utils",
+ "proc-macro-hack",
+ "proc-macro-nested",
+ "slab",
 ]
 
 [[package]]
@@ -376,7 +407,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "futures-util",
- "http 0.2.0",
+ "http",
  "indexmap",
  "log 0.4.8",
  "slab",
@@ -394,7 +425,7 @@ dependencies = [
  "bitflags",
  "bytes 0.5.4",
  "headers-core",
- "http 0.2.0",
+ "http",
  "mime 0.3.16",
  "sha-1",
  "time",
@@ -406,7 +437,7 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e7f66481bfee273957b1f20485a4ff3362987f85b2c236580d81b4eb7a326429"
 dependencies = [
- "http 0.2.0",
+ "http",
 ]
 
 [[package]]
@@ -429,17 +460,6 @@ dependencies = [
 
 [[package]]
 name = "http"
-version = "0.1.21"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6ccf5ede3a895d8856620237b2f02972c1bbc78d2965ad7fe8838d4a0ed41f0"
-dependencies = [
- "bytes 0.4.12",
- "fnv",
- "itoa",
-]
-
-[[package]]
-name = "http"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b708cc7f06493459026f53b9a61a7a121a5d1ec6238dee58ea4941132b30156b"
@@ -456,7 +476,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13d5ff830006f7646652e057693569bfe0d51760c0085a071769d142a205111b"
 dependencies = [
  "bytes 0.5.4",
- "http 0.2.0",
+ "http",
 ]
 
 [[package]]
@@ -485,7 +505,7 @@ dependencies = [
  "futures-core",
  "futures-util",
  "h2",
- "http 0.2.0",
+ "http",
  "http-body",
  "httparse",
  "itoa",
@@ -520,11 +540,11 @@ dependencies = [
 
 [[package]]
 name = "input_buffer"
-version = "0.2.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e1b822cc844905551931d6f81608ed5f50a79c1078a4e2b4d42dbc7c1eedfbf"
+checksum = "19a8a95243d5a0398cae618ec29477c6e3cb631152be5c19481f80bc71559754"
 dependencies = [
- "bytes 0.4.12",
+ "bytes 0.5.4",
 ]
 
 [[package]]
@@ -869,6 +889,23 @@ dependencies = [
  "env_logger",
  "log 0.4.8",
 ]
+
+[[package]]
+name = "proc-macro-hack"
+version = "0.5.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecd45702f76d6d3c75a80564378ae228a85f0b59d2f3ed43c91b4a69eb2ebfc5"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "proc-macro-nested"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "369a6ed065f249a159e06c45752c780bda2fb53c995718f9e484d08daa9eb42e"
 
 [[package]]
 name = "proc-macro2"
@@ -1328,7 +1365,7 @@ dependencies = [
 [[package]]
 name = "tokio"
 version = "0.2.11"
-source = "git+https://github.com/tokio-rs/tokio#ab24a655adc1eb0d0c6951d5df2b815c671ac7d2"
+source = "git+https://github.com/tokio-rs/tokio#55b5e1b6adcc3f85a35d16444e496b203648c99d"
 dependencies = [
  "bytes 0.5.4",
  "fnv",
@@ -1346,7 +1383,7 @@ dependencies = [
 [[package]]
 name = "tokio-macros"
 version = "0.2.4"
-source = "git+https://github.com/tokio-rs/tokio#ab24a655adc1eb0d0c6951d5df2b815c671ac7d2"
+source = "git+https://github.com/tokio-rs/tokio#55b5e1b6adcc3f85a35d16444e496b203648c99d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1363,6 +1400,19 @@ dependencies = [
  "rustls",
  "tokio",
  "webpki",
+]
+
+[[package]]
+name = "tokio-tungstenite"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8b8fe88007ebc363512449868d7da4389c9400072a3f666f212c7280082882a"
+dependencies = [
+ "futures",
+ "log 0.4.8",
+ "pin-project",
+ "tokio",
+ "tungstenite",
 ]
 
 [[package]]
@@ -1391,7 +1441,7 @@ dependencies = [
  "bytes 0.5.4",
  "futures-core",
  "futures-util",
- "http 0.2.0",
+ "http",
  "http-body",
  "hyper",
  "percent-encoding 1.0.1",
@@ -1648,14 +1698,14 @@ checksum = "e604eb7b43c06650e854be16a2a03155743d3752dd1c943f6829e26b7a36e382"
 
 [[package]]
 name = "tungstenite"
-version = "0.9.2"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a0c2bd5aeb7dcd2bb32e472c8872759308495e5eccc942e929a513cd8d36110"
+checksum = "cfea31758bf674f990918962e8e5f07071a3161bd7c4138ed23e416e1ac4264e"
 dependencies = [
  "base64 0.11.0",
  "byteorder",
- "bytes 0.4.12",
- "http 0.1.21",
+ "bytes 0.5.4",
+ "http",
  "httparse",
  "input_buffer",
  "log 0.4.8",
@@ -1782,12 +1832,12 @@ dependencies = [
 [[package]]
 name = "warp"
 version = "0.2.1"
-source = "git+https://github.com/seanmonstar/warp#01725e93e1fc1c47a5c76229e7745f32b200f03a"
+source = "git+https://github.com/seanmonstar/warp#9dacd7d9977e7894aada7ea4cf71754aa41e1033"
 dependencies = [
  "bytes 0.5.4",
  "futures",
  "headers",
- "http 0.2.0",
+ "http",
  "hyper",
  "log 0.4.8",
  "mime 0.3.16",
@@ -1799,8 +1849,8 @@ dependencies = [
  "serde_json",
  "serde_urlencoded",
  "tokio",
+ "tokio-tungstenite",
  "tower-service",
- "tungstenite",
  "urlencoding",
 ]
 
