@@ -13,10 +13,10 @@ bytes = "0.4"
 log = "0.4"
 pretty_env_logger = "0.3.1"
 prost = "0.6"
-tokio = { git = "https://github.com/tokio-rs/tokio", features = ["rt-threaded", "dns", "macros"] }
+tokio = { version = "0.2.11", features = ["rt-threaded", "dns", "macros"] }
 tonic = { version = "0.1.1", features = ["tls"] }
 # TODO: disable default-features
-warp = { git = "https://github.com/seanmonstar/warp" }
+warp = { version = "0.2.1" }
 
 [build-dependencies]
 tonic-build = { version = "0.1.1" }
