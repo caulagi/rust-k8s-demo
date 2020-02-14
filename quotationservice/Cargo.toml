@@ -14,10 +14,10 @@ path = "src/main.rs"
 bytes = "0.4"
 log = "0.4"
 pretty_env_logger = "0.3.1"
-prost = "0.5"
-tokio = { version = "0.2", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
+prost = "0.6"
+tokio = { version = "0.2.11", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
 tokio-postgres = { version = "0.5.1" }
-tonic = { git = "https://github.com/hyperium/tonic", features = ["tls"] }
+tonic = { version = "0.1.1", features = ["tls"] }
 
 [build-dependencies]
-tonic-build = { git = "https://github.com/hyperium/tonic" }
+tonic-build = { version = "0.1.1" }
