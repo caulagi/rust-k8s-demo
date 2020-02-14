@@ -11,7 +11,7 @@ path = "src/main.rs"
 [dependencies]
 bytes = "0.4"
 log = "0.4"
-pretty_env_logger = "0.3.1"
+pretty_env_logger = "0.4.0"
 prost = "0.6"
 tokio = { version = "0.2.11", features = ["rt-threaded", "dns", "macros"] }
 tonic = { version = "0.1.1", features = ["tls"] }
