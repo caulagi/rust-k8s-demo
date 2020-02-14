@@ -20,6 +20,3 @@ warp = { version = "0.2.1" }
 
 [build-dependencies]
 tonic-build = { version = "0.1.1" }
-
-[patch.crates-io]
-tokio = { git = "https://github.com/tokio-rs/tokio" }
