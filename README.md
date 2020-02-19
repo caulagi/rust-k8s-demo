@@ -5,7 +5,7 @@
 ![architecture][architecture]
 
 This project is an experiment with how modern web applications would look like
-when using **Rust** and **Kubernetes**. It is based on [microservices-demo][demo].
+when using **Rust** and **Kubernetes**. It is inspired by [microservices-demo][demo].
 
 It is a simple web application that returns a new quotation for each request.
 
