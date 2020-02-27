@@ -4,5 +4,5 @@ update_configs:
     directory: "/frontendservice"
     update_schedule: "weekly"
   - package_manager: "rust:cargo"
-    directory: "/quotationservice
+    directory: "/quotationservice"
     update_schedule: "weekly"
