@@ -19,4 +19,4 @@ tonic = { version = "0.1.1", features = ["tls"] }
 warp = { version = "0.2.2" }
 
 [build-dependencies]
-tonic-build = { version = "0.1.1" }
+tonic-build = { version = "0.2.0" }
