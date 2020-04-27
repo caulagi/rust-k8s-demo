@@ -13,7 +13,7 @@ bytes = "0.4"
 log = "0.4"
 pretty_env_logger = "0.4.0"
 prost = "0.6"
-tokio = { version = "0.2.18", features = ["rt-threaded", "dns", "macros"] }
+tokio = { version = "0.2.19", features = ["rt-threaded", "dns", "macros"] }
 tonic = { version = "0.2.0", features = ["tls"] }
 # TODO: disable default-features
 warp = { version = "0.2.2" }
