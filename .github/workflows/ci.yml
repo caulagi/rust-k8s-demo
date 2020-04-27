@@ -72,5 +72,7 @@ jobs:
           chmod +x skaffold
           sudo mv skaffold /usr/local/bin
       - run: skaffold version
+      - run: kubectl get nodes
+      - run: kubectl get pods
       - name: Run integration test
         run: make e2e

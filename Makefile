@@ -7,13 +7,20 @@ update-proto: # Update protobuf definitions for all microservices
 
 .PHONY: e2e
 e2e: $(SERVICE_IP)
-	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
+	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.9.3/manifests/metallb.yaml
+	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 	kubectl create secret generic postgres-password --from-literal=pgpassword=panda
 	skaffold run
 	kubectl rollout status --timeout 2m -w deployments/postgres-deployment
 	kubectl rollout status --timeout 2m -w deployments/quotationservice
 	kubectl rollout status --timeout 2m -w deployments/frontendservice
 	@echo "Frontend service loadbalancer ip: $(value SERVICE_IP)"
+	kubectl get nodes
+	kubectl get pods -o wide
+	kubectl get svc --selector=app=frontend,component=loadbalancer -o yaml
+	kubectl get endpoints
+	kubectl describe svc frontend-external
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://$(value SERVICE_IP) -o /dev/null)
 
 .PHONY: help
