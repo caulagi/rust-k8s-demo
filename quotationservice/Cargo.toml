@@ -15,7 +15,7 @@ bytes = "0.5"
 log = "0.4"
 pretty_env_logger = "0.4.0"
 prost = "0.6"
-tokio = { version = "0.2.18", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
+tokio = { version = "0.2.20", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
 tokio-postgres = { version = "0.5.3" }
 tonic = { version = "0.2.0", features = ["tls"] }
 
