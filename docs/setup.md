@@ -44,7 +44,7 @@ $ GO111MODULE="on" go get sigs.k8s.io/kind@v0.7.0
 $ kind create cluster --config kind-config.yaml
 
 $ kubectl create secret generic postgres-password --from-literal=pgpassword=panda
-$ kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
+$ make metallb
 
 # Run services
 $ skaffold run

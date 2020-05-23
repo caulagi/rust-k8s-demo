@@ -5,9 +5,14 @@ update-proto: # Update protobuf definitions for all microservices
 	cp proto/quotation.proto quotationservice/proto
 	cp proto/quotation.proto frontendservice/proto
 
+PHONY: metallb
+metallb:
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.9.3/manifests/namespace.yaml
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.9.3/manifests/metallb.yaml
+	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
 .PHONY: e2e
 e2e: $(SERVICE_IP)
-	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
 	kubectl create secret generic postgres-password --from-literal=pgpassword=panda
 	skaffold run
 	kubectl rollout status --timeout 2m -w deployments/postgres-deployment
