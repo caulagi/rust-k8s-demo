@@ -20,6 +20,8 @@ e2e: $(SERVICE_IP)
 	kubectl get endpoints
 	kubectl describe endpoints frontend-external
 	kubectl describe svc frontend-external
+	kubectl get pods -n metallb-system
+	curl -v --connect-timeout 1 192.168.1.240
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://$(value SERVICE_IP) -o /dev/null)
 
 .PHONY: help
