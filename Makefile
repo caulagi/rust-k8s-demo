@@ -16,10 +16,9 @@ e2e: $(SERVICE_IP)
 	kubectl rollout status --timeout 2m -w deployments/quotationservice
 	kubectl rollout status --timeout 2m -w deployments/frontendservice
 	@echo "Frontend service loadbalancer ip: $(value SERVICE_IP)"
-	kubectl get nodes
-	kubectl get pods -o wide
-	kubectl get svc --selector=app=frontend,component=loadbalancer -o yaml
+	kubectl get nodes -o wide
 	kubectl get endpoints
+	kubectl describe endpoints frontend-external
 	kubectl describe svc frontend-external
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://$(value SERVICE_IP) -o /dev/null)
 
