@@ -21,8 +21,8 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] Local dev setup using skaffold
 - [x] CI
 - [ ] CD
-- [-] Service mesh
-- [ ] open tracing
+- [x] Service mesh
+- [ ] Distributed (open) tracing
 
 ## Getting started
 
