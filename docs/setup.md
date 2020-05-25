@@ -43,17 +43,20 @@ You can setup a local kubernetes on Linux and Mac using [kind][kind]
 $ GO111MODULE="on" go get sigs.k8s.io/kind@v0.7.0
 $ kind create cluster --config kind-config.yaml
 
-$ kubectl create secret generic postgres-password --from-literal=pgpassword=panda
-$ make metallb
+$ make bootstrap
 
 # Run services
 $ skaffold run
 
+# OSX only
+#
 # Due to https://mauilion.dev/posts/kind-metallb/, it is better
 # to port-forward the frontendservice pod
 #
 # requires jq binary
 $ kubectl get pods --selector app=frontendservice -o json | jq  ".items[0].metadata.name" | xargs -I % kubectl port-forward pod/% 8080
+
+# and goto http://localhost:8080
 ```
 
 [kind]: https://github.com/kubernetes-sigs/kind

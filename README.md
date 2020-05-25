@@ -32,7 +32,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 * Install [skaffold](https://skaffold.dev/) and run the application
 
     ```shell
-    $ kubectl create secret generic postgres-password --from-literal=pgpassword=1234
+    $ make bootstrap
     $ skaffold run --tail
     ```
 
