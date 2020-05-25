@@ -72,7 +72,5 @@ jobs:
           chmod +x skaffold
           sudo mv skaffold /usr/local/bin
       - run: skaffold version
-      - name: Install metallb
-        run: make metallb
-      - name: Run integration test
-        run: make e2e
+      - run: make bootstrap
+      - run: make e2e
