@@ -26,6 +26,18 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 ## Getting started
 
+* The repo requires [git-lfs][git-lfs].
+
+    ```shell
+    $ git clone https://github.com/caulagi/rust-k8s-demo
+
+    # make sure git lfs files have been cloned
+    # otherwise git lfs pull will get the file
+    $ ls -lh databaseservice/data
+    total 15424
+    -rw-r--r--  1 pradip.caulagi  staff   7.5M Feb 27 15:55 data.sql
+    ```
+
 * Setup a local kubernetes cluster, using Kubernetes for docker-for-mac
 (for Linux or other options in getting started, see [setup](./docs/setup.md)).
 
@@ -47,3 +59,4 @@ This project is licensed under [MIT](LICENSE).
 [actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Frust-k8s-demo%2Fbadge&style=flat&label=Build%20status
 [actions-url]: https://actions-badge.atrox.dev/caulagi/rust-k8s-demo/goto
 [architecture]: https://user-images.githubusercontent.com/222507/72002857-89411780-3248-11ea-9e16-9e6912f2a75b.png
+[git-lfs]: https://git-lfs.github.com
