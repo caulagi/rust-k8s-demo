@@ -20,9 +20,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] Microservices talking to each other using grpc
 - [x] Local dev setup using skaffold
 - [x] CI
-- [ ] CD
 - [x] Service mesh
-- [ ] Distributed (open) tracing
 
 ## Getting started
 
@@ -50,10 +48,19 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 * **QED** - Go to [http://localhost](http://localhost)
 
+
+## Todo
+
+- [ ] CD
+- [ ] Distributed (open) tracing
+- [ ] Prometheus, grafana, alert-manager
+- [ ] Cert Manager
+- [ ] External DNS(?)
+
+
 ## LICENSE
 
 This project is licensed under [MIT](LICENSE).
-
 
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Frust-k8s-demo%2Fbadge&style=flat&label=Build%20status
