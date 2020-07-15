@@ -17,7 +17,7 @@ pretty_env_logger = "0.4.0"
 prost = "0.6"
 tokio = { version = "0.2.21", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
 tokio-postgres = { version = "0.5.5" }
-tonic = { version = "0.2.2", features = ["tls"] }
+tonic = { version = "0.3.0", features = ["tls"] }
 
 [build-dependencies]
-tonic-build = { version = "0.2.2" }
+tonic-build = { version = "0.3.0" }
