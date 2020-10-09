@@ -1,4 +1,4 @@
-FROM rust:1.46.0-slim-buster as build
+FROM rust:1.47.0-slim-buster as build
 
 ENV RUST_LOG frontend=info
 ENV FORTUNE_SERVICE_HOSTNAME fortuneservice
