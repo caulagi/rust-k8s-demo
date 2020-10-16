@@ -3,16 +3,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontendservice
-  annotations:
-    linkerd.io/inject: enabled
 spec:
   selector:
     matchLabels:
       app: frontendservice
   template:
     metadata:
-      annotations:
-        linkerd.io/inject: enabled
       labels:
         app: frontendservice
     spec:
