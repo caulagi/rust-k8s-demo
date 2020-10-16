@@ -2,16 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quotationservice
-  annotations:
-    linkerd.io/inject: enabled
 spec:
   selector:
     matchLabels:
       app: quotationservice
   template:
     metadata:
-      annotations:
-        linkerd.io/inject: enabled
       labels:
         app: quotationservice
     spec:
