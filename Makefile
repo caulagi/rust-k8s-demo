@@ -1,5 +1,3 @@
-SERVICE_IP = $(kubectl get svc --selector=app=frontend,component=loadbalancer -o json | jq --raw-output ".items[0].status.loadBalancer.ingress[0].ip")
-
 PHONY: update-proto
 update-proto: # Update protobuf definitions for all microservices
 	cp proto/quotation.proto quotationservice/proto
@@ -7,8 +5,8 @@ update-proto: # Update protobuf definitions for all microservices
 
 PHONY: bootstrap
 bootstrap:
-	kubectl create namespace metallb-system
-	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(shell openssl rand -base64 128)"
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s
 	kubectl create secret generic postgres-password --from-literal=pgpassword=panda
 
 .PHONY: e2e
@@ -17,8 +15,7 @@ e2e: $(SERVICE_IP)
 	kubectl rollout status --timeout 2m -w deployments/postgres-deployment
 	kubectl rollout status --timeout 2m -w deployments/quotationservice
 	kubectl rollout status --timeout 2m -w deployments/frontendservice
-	@echo "Frontend service loadbalancer ip: $(value SERVICE_IP)"
-	test 200 = $$(curl -sL -w "%{http_code}\\n" http://$(value SERVICE_IP) -o /dev/null)
+	test 200 = $$(curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null)
 
 .PHONY: help
 help: # Show this help
