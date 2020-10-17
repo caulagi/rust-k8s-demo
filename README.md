@@ -20,7 +20,6 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] Microservices talking to each other using grpc
 - [x] Local dev setup using skaffold
 - [x] CI
-- [ ] Service mesh
 
 ## Getting started
 
@@ -51,6 +50,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 ## Todo
 
+- [ ] Service mesh
 - [ ] CD
 - [ ] Distributed (open) tracing
 - [ ] Prometheus, grafana, alert-manager
