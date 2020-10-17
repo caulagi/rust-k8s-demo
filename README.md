@@ -65,5 +65,5 @@ This project is licensed under [MIT](LICENSE).
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
 [actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Frust-k8s-demo%2Fbadge&style=flat&label=Build%20status
 [actions-url]: https://actions-badge.atrox.dev/caulagi/rust-k8s-demo/goto
-[architecture]: https://user-images.githubusercontent.com/222507/72002857-89411780-3248-11ea-9e16-9e6912f2a75b.png
+[architecture]: https://user-images.githubusercontent.com/222507/96347681-a510fe00-10a3-11eb-8ed7-183c460b5def.png
 [git-lfs]: https://git-lfs.github.com
