@@ -52,7 +52,7 @@ spec:
       port: 80
       targetPort: 8080
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: frontendservice-ingress
@@ -60,12 +60,10 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: frontendservice
-              port:
-                number: 80
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: frontendservice
+          servicePort: 80
