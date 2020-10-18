@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta2
+apiVersion: skaffold/v2beta8
 kind: Config
 build:
   artifacts:
@@ -13,4 +13,4 @@ build:
 deploy:
   kubectl:
     manifests:
-    - ./kubernetes-manifests/**.yaml
+    - ./manifests/**.yaml

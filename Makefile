@@ -6,7 +6,7 @@ update-proto: # Update protobuf definitions for all microservices
 PHONY: bootstrap
 bootstrap:
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
-	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s
+	kubectl rollout status --timeout 2m -w deployments/ingress-nginx-controller -n ingress-nginx
 	kubectl create secret generic postgres-password --from-literal=pgpassword=panda
 
 .PHONY: e2e
