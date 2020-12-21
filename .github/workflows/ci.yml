@@ -24,8 +24,13 @@ jobs:
         run: cargo build
         env:
           RUST_LOG: frontend=info
-      - name: Check format frontendservice
+      - name: Set nightly for cargo fmt
         working-directory: frontendservice
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+      - name: Check format frontendservice
         run: cargo fmt -- --check
 
   build-quotation:
