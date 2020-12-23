@@ -15,9 +15,10 @@ bytes = "1.0"
 log = "0.4"
 pretty_env_logger = "0.4.0"
 prost = "0.6"
-tokio = { version = "0.2.24", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
+tokio = { version = "1.0.1", features = ["rt-multi-thread", "net", "macros"] }
 tokio-postgres = { version = "0.5.5" }
 tonic = { version = "0.3.1", features = ["tls"] }
+tokio-compat-02 = "0.1.2"
 
 [build-dependencies]
 tonic-build = { version = "0.3.1" }

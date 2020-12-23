@@ -1,6 +1,7 @@
 use std::{env, io, net::SocketAddr};
 
 use tokio::net;
+use tokio_compat_02::FutureExt;
 use warp::Filter;
 pub mod quotation {
     tonic::include_proto!("quotation");
@@ -62,5 +63,5 @@ async fn main() {
 
     let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
     log::info!("Frontend service starting on {:?}", addr);
-    warp::serve(routes).run(addr).await;
+    warp::serve(routes).run(addr).compat().await;
 }
