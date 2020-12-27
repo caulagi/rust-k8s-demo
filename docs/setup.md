@@ -1,11 +1,10 @@
 # Setting up kubernetes and local development
 
-**Preparation (required)**: You need to have a postgres database with some quotations loaded.
-You can follow the instructions at https://github.com/caulagi/postgres-quotation.
+#### Setup local postgres database
 
-You can also **choose one of the options below** (they all do the same thing)
-for setting up the project locally.
-
+```
+$ docker run -d -e POSTGRES_PASSWORD=1234 -p 5432:5432 --mount type=bind,source=$(pwd)/databaseservice/data/data.sql,target=/docker-entrypoint-initdb.d/01-data.sql postgres:12
+```
 
 #### Using docker
 
