@@ -24,9 +24,14 @@ jobs:
         run: cargo build
         env:
           RUST_LOG: frontend=info
-      - name: Check format frontendservice
+      - name: Set nightly for cargo fmt
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+      - name: Check frontendservice code format
+        run: cargo +nightly fmt -- --check
         working-directory: frontendservice
-        run: cargo fmt -- --check
 
   build-quotation:
     name: Check quotationservice
@@ -46,9 +51,14 @@ jobs:
         run: cargo build
         env:
           RUST_LOG: quotation=info
-      - name: Check format quotationservice
+      - name: Set nightly for cargo fmt
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+      - name: Check quotationservice code format
+        run: cargo +nightly fmt -- --check
         working-directory: quotationservice
-        run: cargo fmt -- --check
 
   integration-test:
     name: Integration test

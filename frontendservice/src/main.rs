@@ -1,6 +1,4 @@
-use std::env;
-use std::io;
-use std::net::SocketAddr;
+use std::{env, io, net::SocketAddr};
 
 use tokio::net;
 use warp::Filter;
