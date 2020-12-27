@@ -29,8 +29,8 @@ jobs:
         with:
           toolchain: nightly
           components: rustfmt
-      - name: Check format frontendservice
-        run: cargo fmt -- --check
+      - name: Check frontendservice code format
+        run: cargo +nightly fmt -- --check
         working-directory: frontendservice
 
   build-quotation:
@@ -56,8 +56,8 @@ jobs:
         with:
           toolchain: nightly
           components: rustfmt
-      - name: Check format quotationservice
-        run: cargo fmt -- --check
+      - name: Check quotationservice code format
+        run: cargo +nightly fmt -- --check
         working-directory: quotationservice
 
   integration-test:
