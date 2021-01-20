@@ -1,7 +1,6 @@
 use std::{env, io, net::SocketAddr};
 
 use tokio::net;
-use tokio_compat_02::FutureExt;
 use warp::Filter;
 pub mod quotation {
     tonic::include_proto!("quotation");
@@ -40,7 +39,6 @@ async fn get_quotation() -> Result<Box<String>, Box<dyn std::error::Error>> {
     let mut client = QuotationClient::connect(uri).await?;
     let request = tonic::Request::new(QuotationRequest {});
     let response = client.get_random_quotation(request).await?;
-    log::trace!("RESPONSE={:?}", response);
     Ok(Box::new(response.into_inner().message.to_string()))
 }
 
@@ -63,5 +61,5 @@ async fn main() {
 
     let addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
     log::info!("Frontend service starting on {:?}", addr);
-    warp::serve(routes).run(addr).compat().await;
+    warp::serve(routes).run(addr).await;
 }

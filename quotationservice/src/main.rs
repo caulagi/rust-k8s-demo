@@ -1,6 +1,5 @@
 use std::env;
 
-use tokio_compat_02::FutureExt;
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
 
@@ -70,7 +69,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Server::builder()
         .add_service(QuotationServer::new(quotationr))
         .serve(addr)
-        .compat()
         .await?;
 
     Ok(())
