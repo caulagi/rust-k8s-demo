@@ -26,7 +26,7 @@ If you would like to run everything locally, you need the
 
 ```shell
 $ cd frontendservice
-$ QUOTATION_SERVICE_HOSTNAME=localhost RUST_LOG=frontend=info cargo run
+$ RUST_LOG=frontend=info QUOTATION_SERVICE_HOSTNAME=localhost cargo run
 
 $ cd quotationservice
 $ RUST_LOG=quotation=info POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 cargo run
