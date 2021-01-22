@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Check frontendservice
+    name: Build & check format
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +26,7 @@ jobs:
         with:
           toolchain: nightly
           components: rustfmt
-      - name: Check frontendservice code format
+      - name: Check code format
         run: cargo +nightly fmt -- --check
 
   integration-test:
