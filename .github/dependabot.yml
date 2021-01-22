@@ -1,14 +1,8 @@
 version: 2
 updates:
 - package-ecosystem: cargo
-  directory: "/quotationservice"
+  directory: "."
   schedule:
     interval: weekly
-    time: "04:00"
-  open-pull-requests-limit: 10
-- package-ecosystem: cargo
-  directory: "/frontendservice"
-  schedule:
-    interval: weekly
-    time: "04:00"
+    time: "08:00"
   open-pull-requests-limit: 10
