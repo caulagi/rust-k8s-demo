@@ -1,8 +1,0 @@
-version: 1
-update_configs:
-  - package_manager: "rust:cargo"
-    directory: "/frontendservice"
-    update_schedule: "weekly"
-  - package_manager: "rust:cargo"
-    directory: "/quotationservice"
-    update_schedule: "weekly"
