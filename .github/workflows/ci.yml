@@ -6,7 +6,7 @@ on:
     - cron: "0 6 * * *"
 
 jobs:
-  build-frontend:
+  build:
     name: Check frontendservice
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
@@ -19,11 +19,8 @@ jobs:
           components: rustfmt
           profile: minimal
           override: true
-      - name: Build frontendservice
-        working-directory: frontendservice
+      - name: Build
         run: cargo build
-        env:
-          RUST_LOG: frontend=info
       - name: Set nightly for cargo fmt
         uses: actions-rs/toolchain@v1
         with:
@@ -31,34 +28,6 @@ jobs:
           components: rustfmt
       - name: Check frontendservice code format
         run: cargo +nightly fmt -- --check
-        working-directory: frontendservice
-
-  build-quotation:
-    name: Check quotationservice
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: rustfmt
-          profile: minimal
-          override: true
-      - name: Build quotationservice
-        working-directory: quotationservice
-        run: cargo build
-        env:
-          RUST_LOG: quotation=info
-      - name: Set nightly for cargo fmt
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          components: rustfmt
-      - name: Check quotationservice code format
-        run: cargo +nightly fmt -- --check
-        working-directory: quotationservice
 
   integration-test:
     name: Integration test
