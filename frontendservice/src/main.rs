@@ -39,7 +39,7 @@ async fn get_quotation() -> Result<Box<String>, Box<dyn std::error::Error>> {
     let mut client = QuotationClient::connect(uri).await?;
     let request = tonic::Request::new(QuotationRequest {});
     let response = client.get_random_quotation(request).await?;
-    Ok(Box::new(response.into_inner().message.to_string()))
+    Ok(Box::new(response.into_inner().message))
 }
 
 #[tokio::main]
