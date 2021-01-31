@@ -16,18 +16,17 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          components: rustfmt
+          components: rustfmt, clippy
           profile: minimal
           override: true
-      - name: Build
-        run: cargo build
+      - run: cargo build
+      - run: cargo clippy
       - name: Set nightly for cargo fmt
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt
-      - name: Check code format
-        run: cargo +nightly fmt -- --check
+      - run: cargo +nightly fmt -- --check
 
   integration-test:
     name: Integration test
