@@ -28,7 +28,7 @@ async fn hostname_to_ip(name: &str) -> io::Result<String> {
 
 async fn get_quotation() -> Result<Box<String>, Box<dyn std::error::Error>> {
     let service_hostname = match env::var("QUOTATION_SERVICE_HOSTNAME") {
-        Ok(val) => format!("{}:50051", val),
+        Ok(val) => format!("{}:9001", val),
         Err(_) => panic!("Not able to find QUOTATION_SERVICE_HOSTNAME"),
     };
     let address = hostname_to_ip(&service_hostname).await;

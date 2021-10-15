@@ -62,7 +62,7 @@ impl Quotation for MyQuotation {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();
 
-    let addr = "0.0.0.0:50051".parse().unwrap();
+    let addr = "0.0.0.0:9001".parse().unwrap();
     let quotationr = MyQuotation::default();
 
     log::info!("Quotation service starting on {:?}", addr);
