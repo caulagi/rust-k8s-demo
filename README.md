@@ -1,6 +1,6 @@
 # rust-k8s-demo
 
-[![Build Status][actions-badge]][actions-url]
+[![Build & test project](https://github.com/caulagi/rust-k8s-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/caulagi/rust-k8s-demo/actions/workflows/ci.yml)
 
 ![architecture][architecture]
 
@@ -63,7 +63,5 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 This project is licensed under [MIT](LICENSE).
 
 [demo]: https://github.com/GoogleCloudPlatform/microservices-demo
-[actions-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fcaulagi%2Frust-k8s-demo%2Fbadge&style=flat&label=Build%20status
-[actions-url]: https://actions-badge.atrox.dev/caulagi/rust-k8s-demo/goto
 [architecture]: https://user-images.githubusercontent.com/222507/96347681-a510fe00-10a3-11eb-8ed7-183c460b5def.png
 [git-lfs]: https://git-lfs.github.com
