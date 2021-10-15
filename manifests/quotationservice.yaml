@@ -16,7 +16,7 @@ spec:
         - name: quotationservice
           image: quotationservice
           ports:
-            - containerPort: 50051
+            - containerPort: 9001
           resources:
             requests:
               cpu: 200m
@@ -38,12 +38,12 @@ spec:
           #   initialDelaySeconds: 20
           #   periodSeconds: 15
           #   exec:
-          #     command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          #     command: ["/bin/grpc_health_probe", "-addr=:9001"]
           # livenessProbe:
           #   initialDelaySeconds: 20
           #   periodSeconds: 15
           #   exec:
-          #     command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          #     command: ["/bin/grpc_health_probe", "-addr=:9001"]
 ---
 apiVersion: v1
 kind: Service
@@ -55,5 +55,5 @@ spec:
     app: quotationservice
   ports:
     - name: grpc
-      port: 50051
-      targetPort: 50051
+      port: 9001
+      targetPort: 9001

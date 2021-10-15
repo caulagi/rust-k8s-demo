@@ -14,7 +14,7 @@ $ docker build -t quotation quotationservice
 
 # for linux: use localhost instead of docker.for.mac.localhost
 $ docker run -it -p 8080:8080 -e QUOTATION_SERVICE_HOSTNAME=docker.for.mac.localhost frontend
-$ docker run -it -p 50051:50051 -e POSTGRES_SERVICE=docker.for.mac.localhost -e POSTGRES_PASSWORD=1234 quotation
+$ docker run -it -p 9001:9001 -e POSTGRES_SERVICE=docker.for.mac.localhost -e POSTGRES_PASSWORD=1234 quotation
 
 # and goto http://localhost:8080
 ```
