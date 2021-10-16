@@ -9,7 +9,8 @@ pub mod quotation {
 
 use quotation::{
     quotation_server::{Quotation, QuotationServer},
-    QuotationRequest, QuotationResponse,
+    QuotationRequest,
+    QuotationResponse,
 };
 
 #[derive(Default)]
