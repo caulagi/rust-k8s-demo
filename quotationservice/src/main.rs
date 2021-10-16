@@ -1,7 +1,9 @@
-use std::env;
+use std::{env, time::Duration};
 
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
+use tower::ServiceBuilder;
+use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 
 pub mod quotation {
     tonic::include_proto!("quotation");
@@ -65,8 +67,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:9001".parse().unwrap();
     let quotationr = MyQuotation::default();
 
+    // Build our middleware stack
+    let layer = ServiceBuilder::new()
+        // Set a timeout
+        .timeout(Duration::from_secs(10))
+        // Log all requests and responses
+        .layer(
+            TraceLayer::new_for_grpc().make_span_with(DefaultMakeSpan::new().include_headers(true)),
+        )
+        .into_inner();
+
     log::info!("Quotation service starting on {:?}", addr);
     Server::builder()
+        .layer(layer)
         .add_service(QuotationServer::new(quotationr))
         .serve(addr)
         .await?;

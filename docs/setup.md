@@ -26,8 +26,8 @@ If you would like to run everything locally, you need the
 
 ```shell
 $ cargo build
-$ RUST_LOG=frontend=info QUOTATION_SERVICE_HOSTNAME=localhost cargo run --bin frontend-server
-$ RUST_LOG=quotation=info POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 cargo run --bin quotation-server
+$ RUST_LOG=frontend=info,tower_http=trace QUOTATION_SERVICE_HOSTNAME=localhost cargo run --bin frontend-server
+$ RUST_LOG=quotation=info,tower_http=trace POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 cargo run --bin quotation-server
 
 # and goto http://localhost:8080
 ```
