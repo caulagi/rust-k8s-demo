@@ -2,6 +2,7 @@ use std::{env, io, net::SocketAddr};
 
 use axum::{handler::get, http::StatusCode, response::IntoResponse, Router};
 use tokio::net;
+use tower_http::trace::TraceLayer;
 pub mod quotation {
     tonic::include_proto!("quotation");
 }
@@ -55,7 +56,9 @@ async fn main() {
     pretty_env_logger::init();
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
-    let app = Router::new().route("/", get(handler));
+    let app = Router::new()
+        .route("/", get(handler))
+        .layer(TraceLayer::new_for_http());
 
     log::info!("Frontend service starting on {:?}", addr);
     axum::Server::bind(&addr)

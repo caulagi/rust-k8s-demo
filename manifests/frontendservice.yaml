@@ -30,7 +30,7 @@ spec:
             - name: QUOTATION_SERVICE_HOSTNAME
               value: "quotationservice"
             - name: RUST_LOG
-              value: frontend=debug
+              value: frontend=debug,tower_http=trace
           resources:
             requests:
               cpu: 100m
@@ -52,7 +52,7 @@ spec:
       port: 80
       targetPort: 8080
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontendservice-ingress
@@ -65,5 +65,7 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: frontendservice
-          servicePort: 80
+          service:
+            name: frontendservice
+            port:
+              number: 80
