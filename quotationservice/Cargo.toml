@@ -11,12 +11,12 @@ name = "quotation-server"
 path = "src/main.rs"
 
 [dependencies]
-bytes = "1.0"
+bytes = "1.0.1"
 log = "0.4.14"
 pretty_env_logger = "0.4.0"
 prost = "0.7"
-tokio = { version = "1.6", features = ["macros", "rt-multi-thread"] }
-tokio-postgres = { version = "0.7" }
+tokio = { version = "1.12.0", features = ["macros", "rt-multi-thread"] }
+tokio-postgres = "0.7.3"
 tonic = { version = "0.4", features = ["tls"] }
 
 [build-dependencies]
