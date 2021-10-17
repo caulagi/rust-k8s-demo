@@ -30,7 +30,7 @@ spec:
             - name: QUOTATION_SERVICE_HOSTNAME
               value: "quotationservice"
             - name: RUST_LOG
-              value: frontend=debug,tower_http=trace
+              value: frontend_server=debug,tower_http=trace
           resources:
             requests:
               cpu: 100m

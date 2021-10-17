@@ -1,9 +1,10 @@
-use std::{env, time::Duration};
+use std::{env, error::Error, time::Duration};
 
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
+use tracing::{debug, info};
 
 pub mod quotation {
     tonic::include_proto!("quotation");
@@ -24,7 +25,7 @@ impl Quotation for MyQuotation {
         &self,
         request: Request<QuotationRequest>,
     ) -> Result<Response<QuotationResponse>, Status> {
-        log::debug!("REQUEST = {:?}", request);
+        debug!("REQUEST = {:?}", request);
         let connect_params = format!(
             "host={} user=postgres password={}",
             env::var("POSTGRES_SERVICE").unwrap(),
@@ -61,8 +62,11 @@ impl Quotation for MyQuotation {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    pretty_env_logger::init();
+async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+    use tracing_subscriber::EnvFilter;
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::from_default_env().add_directive("async_fn=trace".parse()?))
+        .init();
 
     let addr = "0.0.0.0:9001".parse().unwrap();
     let quotationr = MyQuotation::default();
@@ -77,7 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .into_inner();
 
-    log::info!("Quotation service starting on {:?}", addr);
+    info!("Quotation service starting on {:?}", addr);
     Server::builder()
         .layer(layer)
         .add_service(QuotationServer::new(quotationr))
