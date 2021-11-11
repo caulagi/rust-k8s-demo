@@ -1,7 +1,6 @@
-use std::{env, error::Error, io, net::SocketAddr};
+use std::{env, error::Error, net::SocketAddr};
 
 use axum::{handler::get, http::StatusCode, response::IntoResponse, Router};
-use tokio::net;
 use tower_http::trace::TraceLayer;
 use tracing::{debug, error, info};
 use tracing_attributes::instrument;
@@ -12,33 +11,12 @@ pub mod quotation {
 
 use quotation::{quotation_client::QuotationClient, QuotationRequest};
 
-/// Resolve the hostname (like quotationservice) to an ip where
-/// the service is running.
-#[instrument]
-async fn hostname_to_ip(name: &str) -> io::Result<String> {
-    for addr in net::lookup_host(name).await? {
-        if addr.is_ipv4() {
-            debug!("{} resolved to {:?}", name, addr);
-            return Ok(addr.to_string());
-        }
-    }
-
-    panic!("Not able to lookup name")
-}
-
 async fn get_quotation() -> Result<String, Box<dyn std::error::Error>> {
-    let service_hostname = match env::var("QUOTATION_SERVICE_HOSTNAME") {
-        Ok(val) => format!("{}:9001", val),
-        Err(_) => panic!("Not able to find QUOTATION_SERVICE_HOSTNAME"),
-    };
-    let address = hostname_to_ip(&service_hostname).await;
-    let uri = match address {
-        Ok(val) => format!("http://{}", val),
-        Err(_) => panic!("Unable to resolve quotation service"),
-    };
-    let mut client = QuotationClient::connect(uri).await?;
-    let request = tonic::Request::new(QuotationRequest {});
-    let response = client.get_random_quotation(request).await?;
+    let service_hostname = env::var("QUOTATION_SERVICE_HOSTNAME")?;
+    let mut client = QuotationClient::connect(format!("http://{}:9001", service_hostname)).await?;
+    let response = client
+        .get_random_quotation(tonic::Request::new(QuotationRequest {}))
+        .await?;
     Ok(response.into_inner().message)
 }
 
