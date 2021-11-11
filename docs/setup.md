@@ -1,4 +1,4 @@
-# Setting up kubernetes and local development
+# Local development setup
 
 #### Setup local postgres database
 
@@ -31,19 +31,3 @@ $ RUST_LOG=quotation_server=debug,tower_http=trace POSTGRES_SERVICE=localhost PO
 
 # and goto http://localhost:8080
 ```
-
-#### Kind kubernetes cluster
-
-You can setup a local kubernetes on Linux and Mac using [kind][kind]
-
-```shell
-$ GO111MODULE="on" go get sigs.k8s.io/kind@v0.7.0
-$ kind create cluster --config kind-config.yaml
-
-$ make bootstrap
-$ skaffold run
-
-**QED** goto http://localhost
-```
-
-[kind]: https://github.com/kubernetes-sigs/kind
