@@ -2,7 +2,7 @@
 name = "quotation-server"
 version = "0.1.0"
 authors = ["Pradip Caulagi <caulagi@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 license = "MIT"
 
