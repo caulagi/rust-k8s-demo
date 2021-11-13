@@ -1,6 +1,6 @@
 use std::{env, error::Error, net::SocketAddr};
 
-use axum::{handler::get, http::StatusCode, response::IntoResponse, Router};
+use axum::{http::StatusCode, response::IntoResponse, routing::get, Router};
 use tower_http::trace::TraceLayer;
 use tracing::{debug, error, info};
 use tracing_attributes::instrument;
