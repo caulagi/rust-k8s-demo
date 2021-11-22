@@ -19,7 +19,7 @@ tonic = { version = "0.6.1", features = ["tls"] }
 tower = "0.4.10"
 tower-http = { version = "0.1.1", features = ["trace"]}
 tracing = "0.1.29"
-tracing-subscriber = { version = "0.3.1", features = ["default", "env-filter"]}
+tracing-subscriber = { version = "0.3.2", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
 tracing-attributes = "0.1.18"
 
