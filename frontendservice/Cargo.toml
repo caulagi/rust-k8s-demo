@@ -10,7 +10,7 @@ path = "src/main.rs"
 
 [dependencies]
 axum = "0.5.7"
-bytes = "1.1.0"
+bytes = "1.2.0"
 prost = "0.10.4"
 tokio = { version = "1.19.2", features = ["macros", "rt-multi-thread"] }
 tonic = { version = "0.7.2", features = ["tls"] }
