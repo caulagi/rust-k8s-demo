@@ -9,7 +9,7 @@ name = "frontend-server"
 path = "src/main.rs"
 
 [dependencies]
-axum = "0.5.7"
+axum = "0.5.13"
 bytes = "1.2.0"
 prost = "0.10.4"
 tokio = { version = "1.20.1", features = ["macros", "rt-multi-thread"] }
