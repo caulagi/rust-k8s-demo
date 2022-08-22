@@ -14,7 +14,7 @@ path = "src/main.rs"
 bytes = "1.2.1"
 prost = "0.10.4"
 tokio = { version = "1.20.1", features = ["macros", "rt-multi-thread"] }
-tokio-postgres = "0.7.6"
+tokio-postgres = "0.7.7"
 tonic = { version = "0.7.2", features = ["tls"] }
 tower = "0.4.13"
 tower-http = { version = "0.3.4", features = ["trace"]}
