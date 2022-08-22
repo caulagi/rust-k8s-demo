@@ -6,6 +6,8 @@ use tracing::{debug, error, info};
 use tracing_attributes::instrument;
 
 pub mod quotation {
+    // https://github.com/tokio-rs/prost/issues/661
+    #![allow(clippy::derive_partial_eq_without_eq)]
     tonic::include_proto!("quotation");
 }
 
