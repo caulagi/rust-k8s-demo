@@ -21,4 +21,4 @@ tracing-futures = "0.2.5"
 tracing-attributes = "0.1.22"
 
 [build-dependencies]
-tonic-build = { version = "0.7.2" }
+tonic-build = { version = "0.8.0" }
