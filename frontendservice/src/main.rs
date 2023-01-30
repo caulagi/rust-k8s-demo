@@ -15,7 +15,7 @@ use quotation::{quotation_client::QuotationClient, QuotationRequest};
 
 async fn get_quotation() -> Result<String, Box<dyn std::error::Error>> {
     let service_hostname = env::var("QUOTATION_SERVICE_HOSTNAME")?;
-    let mut client = QuotationClient::connect(format!("http://{}:9001", service_hostname)).await?;
+    let mut client = QuotationClient::connect(format!("http://{service_hostname}:9001")).await?;
     let response = client
         .get_random_quotation(tonic::Request::new(QuotationRequest {}))
         .await?;
