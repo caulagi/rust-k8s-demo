@@ -11,7 +11,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
         with:
@@ -37,14 +37,14 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'e2e skip') && !contains(github.event.head_commit.message, 'skip e2e')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           lfs: true
       - uses: actions/setup-go@v1
         with:
           go-version: 1.19
       - name: Install latest version of Kind
-        run: go install sigs.k8s.io/kind@v0.17.0
+        run: go install sigs.k8s.io/kind@v0.19.0
       - run: PATH=$(go env GOPATH)/bin:$PATH kind version
       - name: Create Kind cluster
         run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
