@@ -1,4 +1,4 @@
-FROM rust:1.69.0-slim-buster as build
+FROM rust:1.71.1-slim-buster as build
 
 COPY . /code
 WORKDIR /code
