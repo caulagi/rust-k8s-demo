@@ -3,18 +3,35 @@
 #### Setup local postgres database
 
 ```
-$ docker run -d -e POSTGRES_PASSWORD=1234 -p 5432:5432 --mount type=bind,source=$(pwd)/databaseservice/data/data.sql,target=/docker-entrypoint-initdb.d/01-data.sql postgres:12
+$ podman machine init rust-k8s-demo --volume (pwd):/app
+$ podman machine start rust-k8s-demo
+$ podman system connection default rust-k8s-demo
+$ podman run \
+    -e POSTGRES_PASSWORD=1234 \
+    -p 5432:5432 \
+    -v /app/databaseservice/data/data.sql:/docker-entrypoint-initdb.d/01-data.sql \
+    --name postgres \
+    postgres:15
 ```
 
 #### Using docker
 
 ```shell
-$ docker build -t frontend frontendservice
-$ docker build -t quotation quotationservice
+$ podman build -t frontend frontendservice
+$ podman build -t quotation quotationservice
 
 # for linux: use localhost instead of docker.for.mac.localhost
-$ docker run -it -p 8080:8080 -e QUOTATION_SERVICE_HOSTNAME=docker.for.mac.localhost frontend
-$ docker run -it -p 9001:9001 -e POSTGRES_SERVICE=docker.for.mac.localhost -e POSTGRES_PASSWORD=1234 quotation
+$ podman run -it -p 8080:8080 \
+    -e QUOTATION_SERVICE_HOSTNAME=host.containers.internal \
+    -e RUST_LOG=frontend_server=debug,tower_http=trace \
+    --name frontend \
+    frontend
+$ podman run -it -p 9001:9001 \
+    -e POSTGRES_SERVICE=host.containers.internal \
+    -e POSTGRES_PASSWORD=1234 \
+    -e RUST_LOG=quotation_server=debug,tower_http=trace \
+    --name quotation \
+    quotation
 
 # and goto http://localhost:8080
 ```
