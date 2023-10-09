@@ -3,7 +3,9 @@
 #### Setup local postgres database
 
 ```
-$ podman machine init rust-k8s-demo --volume (pwd):/app
+# for fish shell, use (pwd) instead of $(pwd)
+$ podman machine init rust-k8s-demo --volume $(pwd):/app
+
 $ podman machine start rust-k8s-demo
 $ podman system connection default rust-k8s-demo
 $ podman run \
