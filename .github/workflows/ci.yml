@@ -11,24 +11,20 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install rustfmt, clippy
-        uses: actions-rs/toolchain@v1
+      - name: Install clippy on stable
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          components: rustfmt, clippy
-          profile: minimal
-          override: true
+          components: clippy
       - run: cargo build
       - run: cargo clippy --all-targets --all-features -- -D warnings
       - name: Set nightly for cargo fmt
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: nightly
           components: rustfmt
       - run: cargo +nightly fmt -- --check
 
@@ -37,7 +33,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'e2e skip') && !contains(github.event.head_commit.message, 'skip e2e')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
       - uses: actions/setup-go@v4
