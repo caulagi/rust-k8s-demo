@@ -1,16 +1,23 @@
-apiVersion: skaffold/v2beta8
+apiVersion: skaffold/v4beta7
 kind: Config
+metadata:
+  name: rust-k-s-demo
 build:
   artifacts:
-  - image: databaseservice
-    context: databaseservice
-  - image: quotationservice
-    context: quotationservice
-  - image: frontendservice
-    context: frontendservice
-  tagPolicy:
-    gitCommit: {}
-deploy:
-  kubectl:
-    manifests:
-    - ./manifests/**.yaml
+    - image: databaseservice
+      context: databaseservice
+      docker:
+        dockerfile: Dockerfile
+    - image: frontendservice
+      context: frontendservice
+      docker:
+        dockerfile: Dockerfile
+    - image: quotationservice
+      context: quotationservice
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - manifests/databaseservice.yaml
+    - manifests/frontendservice.yaml
+    - manifests/quotationservice.yaml
