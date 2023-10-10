@@ -12,9 +12,9 @@ bootstrap:
 .PHONY: e2e
 e2e: $(SERVICE_IP)
 	skaffold run
-	kubectl rollout status --timeout 2m -w deployments/postgres-deployment
-	kubectl rollout status --timeout 2m -w deployments/quotationservice
-	kubectl rollout status --timeout 2m -w deployments/frontendservice
+	kubectl rollout status --timeout 10m -w deployments/postgres-deployment
+	kubectl rollout status --timeout 10m -w deployments/quotationservice
+	kubectl rollout status --timeout 10m -w deployments/frontendservice
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null)
 
 .PHONY: help
