@@ -15,6 +15,6 @@ RUN cargo build
 
 EXPOSE 8080
 
-FROM debian:buster-slim
+FROM debian:bookworm
 COPY --from=build /code/target/debug/frontend-server /usr/local/bin/frontend-server
 ENTRYPOINT ["/usr/local/bin/frontend-server"]
