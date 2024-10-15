@@ -50,9 +50,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
         .layer(TraceLayer::new_for_http());
 
     info!("Frontend service starting on {:?}", addr);
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(&addr).await?;
+    axum::serve(listener, app).await?;
     Ok(())
 }

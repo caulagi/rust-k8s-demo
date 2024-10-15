@@ -9,16 +9,16 @@ name = "frontend-server"
 path = "src/main.rs"
 
 [dependencies]
-axum = "0.6.20"
-bytes = "1.5.0"
-prost = "0.12.1"
-tokio = { version = "1.33.0", features = ["macros", "rt-multi-thread"] }
-tonic = { version = "0.10.2", features = ["tls"] }
-tower-http = { version = "0.4.3", features = ["trace"] }
+axum = "0.7.7"
+bytes = "1.7.2"
+prost = "0.13.3"
+tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+tonic = { version = "0.12.3", features = ["tls"] }
+tower-http = { version = "0.6.1", features = ["trace"] }
 tracing = "0.1.40"
-tracing-subscriber = { version = "0.3.17", features = ["default", "env-filter"]}
+tracing-subscriber = { version = "0.3.18", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
-tracing-attributes = "0.1.26"
+tracing-attributes = "0.1.27"
 
 [build-dependencies]
-tonic-build = { version = "0.10.2" }
+tonic-build = { version = "0.12.3" }

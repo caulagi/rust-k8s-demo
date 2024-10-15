@@ -1,4 +1,4 @@
-use std::{env, error::Error, time::Duration};
+use std::{env, error::Error};
 
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
@@ -75,8 +75,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
 
     // Build our middleware stack
     let layer = ServiceBuilder::new()
-        // Set a timeout
-        .timeout(Duration::from_secs(10))
         // Log all requests and responses
         .layer(
             TraceLayer::new_for_grpc().make_span_with(DefaultMakeSpan::new().include_headers(true)),
