@@ -16,6 +16,8 @@ e2e: $(SERVICE_IP)
 	kubectl rollout status --timeout 10m -w deployments/quotationservice
 	kubectl rollout status --timeout 10m -w deployments/frontendservice
 	kubectl rollout status --timeout 10m -w deployments/ingress-nginx-controller -n ingress-nginx
+	kubectl logs -l app=frontendservice
+	kubectl logs -l app=quotationservice
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null)
 
 .PHONY: help
