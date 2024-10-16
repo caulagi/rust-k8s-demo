@@ -15,6 +15,10 @@ e2e: $(SERVICE_IP)
 	kubectl rollout status --timeout 10m -w deployments/postgres-deployment
 	kubectl rollout status --timeout 10m -w deployments/quotationservice
 	kubectl rollout status --timeout 10m -w deployments/frontendservice
+	echo "curl -sL -w "%{http_code}\\n" http://localhost"
+	curl -sL -w "%{http_code}\\n" http://localhost
+	echo "curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null"
+	curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null
 	test 200 = $$(curl -sL -w "%{http_code}\\n" http://localhost -o /dev/null)
 
 .PHONY: help
