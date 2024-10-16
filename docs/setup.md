@@ -13,7 +13,7 @@ $ podman run \
     -p 5432:5432 \
     -v /app/databaseservice/data/data.sql:/docker-entrypoint-initdb.d/01-data.sql \
     --name postgres \
-    postgres:15
+    postgres:15-bookworm
 ```
 
 #### Using docker
