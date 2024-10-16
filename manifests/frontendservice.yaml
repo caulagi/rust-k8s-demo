@@ -56,8 +56,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontendservice-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
   rules:
   - http:
@@ -69,3 +67,4 @@ spec:
             name: frontendservice
             port:
               number: 80
+  ingressClassName: nginx
