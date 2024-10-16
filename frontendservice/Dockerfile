@@ -1,4 +1,4 @@
-FROM rust:1.73.0-slim-buster as build
+FROM rust:1.81.0-bookworm as build
 
 ENV RUST_LOG frontend=info
 ENV FORTUNE_SERVICE_HOSTNAME fortuneservice
@@ -15,6 +15,6 @@ RUN cargo build
 
 EXPOSE 8080
 
-FROM debian:buster-slim
+FROM debian:bookworm
 COPY --from=build /code/target/debug/frontend-server /usr/local/bin/frontend-server
 ENTRYPOINT ["/usr/local/bin/frontend-server"]

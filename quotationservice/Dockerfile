@@ -1,4 +1,4 @@
-FROM rust:1.73.0-slim-buster as build
+FROM rust:1.81.0-bookworm as build
 
 COPY . /code
 WORKDIR /code
@@ -15,6 +15,6 @@ RUN cargo build
 #       chmod +x /bin/grpc_health_probe
 EXPOSE 9001
 
-FROM debian:buster-slim
+FROM debian:bookworm
 COPY --from=build /code/target/debug/quotation-server /usr/local/bin/quotation-server
 ENTRYPOINT ["/usr/local/bin/quotation-server"]
