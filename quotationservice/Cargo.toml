@@ -13,7 +13,7 @@ path = "src/main.rs"
 [dependencies]
 bytes = "1.10.1"
 prost = "0.13.4"
-tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.45.1", features = ["macros", "rt-multi-thread"] }
 tokio-postgres = "0.7.13"
 tonic = { version = "0.12.3", features = ["tls"] }
 tower = "0.5.2"
