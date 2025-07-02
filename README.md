@@ -36,7 +36,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 * Setup a local kubernetes cluster using [kind](https://kind.sigs.k8s.io/).
 
     ```shell
-    $ go install sigs.k8s.io/kind@v0.20.0
+    $ go install sigs.k8s.io/kind@v0.29.0
     $ kind create cluster --config kind-config.yaml
     ```
 

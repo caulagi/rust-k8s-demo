@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     name: Build & check format
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +29,6 @@ jobs:
 
   integration-test:
     name: Integration test
-    if: "!contains(github.event.head_commit.message, 'e2e skip') && !contains(github.event.head_commit.message, 'skip e2e')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +38,7 @@ jobs:
         with:
           go-version: 1.22
       - name: Install latest version of Kind
-        run: go install sigs.k8s.io/kind@v0.20.0
+        run: go install sigs.k8s.io/kind@v0.29.0
       - run: PATH=$(go env GOPATH)/bin:$PATH kind version
       - name: Create Kind cluster
         run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml
