@@ -12,16 +12,16 @@ path = "src/main.rs"
 
 [dependencies]
 bytes = "1.10.1"
-prost = "0.13.4"
 tokio = { version = "1.45.1", features = ["macros", "rt-multi-thread"] }
 tokio-postgres = "0.7.13"
-tonic = { version = "0.12.3", features = ["tls"] }
+tonic = "0.13.1"
 tower = "0.5.2"
-tower-http = { version = "0.6.2", features = ["trace"] }
-tracing = "0.1.40"
-tracing-subscriber = { version = "0.3.18", features = ["default", "env-filter"]}
+tower-http = { version = "0.6.6", features = ["trace"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
-tracing-attributes = "0.1.28"
+tracing-attributes = "0.1.30"
+prost = "0.13.5"
 
 [build-dependencies]
-tonic-build = { version = "0.12.3" }
+tonic-build = { version = "0.13.1",  features = ["prost"] }
