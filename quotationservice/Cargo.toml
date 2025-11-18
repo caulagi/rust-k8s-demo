@@ -19,7 +19,7 @@ tonic-prost = "0.14.2"
 tower = "0.5.2"
 tower-http = { version = "0.6.6", features = ["trace"] }
 tracing = "0.1.41"
-tracing-subscriber = { version = "0.3.19", features = ["default", "env-filter"]}
+tracing-subscriber = { version = "0.3.20", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
 tracing-attributes = "0.1.30"
 prost = "0.14.1"
