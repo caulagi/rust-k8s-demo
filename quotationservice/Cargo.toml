@@ -22,7 +22,7 @@ tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.22", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
 tracing-attributes = "0.1.30"
-prost = "0.14.1"
+prost = "0.14.2"
 
 [build-dependencies]
 tonic-prost-build = "0.14.2"
