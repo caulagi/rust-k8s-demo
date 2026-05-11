@@ -19,7 +19,7 @@ tokio-postgres = "0.7.17"
 tonic = "0.14.5"
 tonic-prost = "0.14.5"
 tower = "0.5.3"
-tower-http = { version = "0.6.8", features = ["trace"] }
+tower-http = { version = "0.6.10", features = ["trace"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["default", "env-filter"]}
 tracing-futures = "0.2.5"
