@@ -10,13 +10,19 @@ spec:
     metadata:
       labels:
         app: quotationservice
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
     spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: quotationservice
           image: quotationservice
           ports:
-            - containerPort: 9001
+            - name: grpc
+              containerPort: 9001
+            - name: metrics
+              containerPort: 9090
           resources:
             requests:
               cpu: 200m
@@ -57,3 +63,6 @@ spec:
     - name: grpc
       port: 9001
       targetPort: 9001
+    - name: metrics
+      port: 9090
+      targetPort: 9090

@@ -10,12 +10,18 @@ spec:
     metadata:
       labels:
         app: frontendservice
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
     spec:
       containers:
         - name: server
           image: frontendservice
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9090
           readinessProbe:
             initialDelaySeconds: 10
             httpGet:
@@ -51,6 +57,9 @@ spec:
     - name: http
       port: 80
       targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

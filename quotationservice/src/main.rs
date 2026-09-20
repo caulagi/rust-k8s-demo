@@ -1,5 +1,7 @@
-use std::{env, error::Error};
+use std::{env, error::Error, net::SocketAddr, time::Instant};
 
+use metrics::{counter, histogram};
+use metrics_exporter_prometheus::PrometheusBuilder;
 use tokio_postgres::NoTls;
 use tonic::{transport::Server, Request, Response, Status};
 use tower::ServiceBuilder;
@@ -25,6 +27,7 @@ impl Quotation for MyQuotation {
         &self,
         request: Request<QuotationRequest>,
     ) -> Result<Response<QuotationResponse>, Status> {
+        let start = Instant::now();
         debug!("REQUEST = {:?}", request);
         let connect_params = format!(
             "host={} user=postgres password={}",
@@ -56,6 +59,9 @@ impl Quotation for MyQuotation {
         let response = quotation::QuotationResponse {
             message: value.to_string(),
         };
+        counter!("grpc_requests_total", "method" => "get_random_quotation").increment(1);
+        histogram!("grpc_request_duration_seconds", "method" => "get_random_quotation")
+            .record(start.elapsed().as_secs_f64());
 
         Ok(Response::new(response))
     }
@@ -67,6 +73,15 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     tracing_subscriber::fmt()
         .with_env_filter(EnvFilter::from_default_env().add_directive("async_fn=trace".parse()?))
         .init();
+
+    let metrics_addr = SocketAddr::from(([0, 0, 0, 0], 9090));
+    PrometheusBuilder::new()
+        .with_http_listener(metrics_addr)
+        .set_buckets(&[
+            0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0,
+        ])?
+        .install()?;
+    info!("Metrics available on {:?}/metrics", metrics_addr);
 
     let addr = "0.0.0.0:9001".parse().unwrap();
     let quotationr = MyQuotation::default();
