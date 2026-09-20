@@ -11,12 +11,16 @@ spec:
     metadata:
       labels:
         component: postgres
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9187"
     spec:
       containers:
         - name: databaseservice
           image: databaseservice
           ports:
-            - containerPort: 5432
+            - name: postgres
+              containerPort: 5432
           livenessProbe:
             initialDelaySeconds: 180
             tcpSocket:
@@ -27,6 +31,28 @@ spec:
                 secretKeyRef:
                   name: postgres-password
                   key: pgpassword
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+          ports:
+            - name: metrics
+              containerPort: 9187
+          env:
+            - name: DATA_SOURCE_URI
+              value: "localhost:5432/postgres?sslmode=disable"
+            - name: DATA_SOURCE_USER
+              value: postgres
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: pgpassword
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
 ---
 apiVersion: v1
 kind: Service
@@ -37,5 +63,9 @@ spec:
   selector:
     component: postgres
   ports:
-    - port: 5432
+    - name: postgres
+      port: 5432
       targetPort: 5432
+    - name: metrics
+      port: 9187
+      targetPort: 9187
