@@ -1,7 +1,7 @@
-apiVersion: skaffold/v4beta7
+apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
-  name: rust-k-s-demo
+  name: rust-k8s-demo
 build:
   artifacts:
     - image: databaseservice
@@ -16,6 +16,7 @@ build:
       context: quotationservice
       docker:
         dockerfile: Dockerfile
+  local: {}
 manifests:
   rawYaml:
     - manifests/databaseservice.yaml
