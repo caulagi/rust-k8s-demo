@@ -10,13 +10,15 @@ returns a new quotation for each request.
 
 There are two isolated microservices. The frontendservice provides one endpoint
 that clients (browsers) can connect to. The quotationservice is a [grpc](https://grpc.io/) server,
-that answers with a quotation for each request. Both the microservices
+that answers with a quotation for each request, reading it from Postgres and
+keeping a copy in Redis for five minutes. Both the microservices
 use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/).
 
 
 ## Features
 
 - [x] Microservices talking to each other using grpc
+- [x] Postgres behind a Redis cache, both exporting Prometheus metrics
 - [x] Local dev setup using skaffold
 - [x] CI: Build code and run e2e tests for each commit in a k8s cluster
 

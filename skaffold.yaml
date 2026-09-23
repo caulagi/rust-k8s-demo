@@ -22,3 +22,4 @@ manifests:
     - manifests/databaseservice.yaml
     - manifests/frontendservice.yaml
     - manifests/quotationservice.yaml
+    - manifests/redis.yaml
