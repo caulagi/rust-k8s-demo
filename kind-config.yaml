@@ -5,16 +5,8 @@ nodes:
 - role: worker
 - role: worker
 - role: control-plane
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "ingress-ready=true"
   extraPortMappings:
-  - containerPort: 80
+  # Envoy's node port, from manifests/gateway.yaml.
+  - containerPort: 30080
     hostPort: 80
-    protocol: TCP
-  - containerPort: 443
-    hostPort: 443
     protocol: TCP
