@@ -16,6 +16,8 @@ metrics = "0.24.6"
 metrics-exporter-prometheus = { version = "0.18.3", default-features = false, features = ["http-listener"] }
 prost = "0.14.3"
 prost-types = "0.14.3"
+rand = "0.10"
+redis = { version = "1.7", features = ["tokio-comp", "connection-manager"] }
 tokio = { version = "1.50.0", features = ["macros", "rt-multi-thread"] }
 tokio-postgres = "0.7.17"
 tonic = "0.14.5"

@@ -16,6 +16,14 @@ $ podman run \
     postgres:15-bookworm
 ```
 
+#### Setup local redis (optional)
+
+Without `REDIS_SERVICE` the quotation service reads every quotation from Postgres.
+
+```
+$ podman run -p 6379:6379 --name redis redis:7-bookworm
+```
+
 #### Using docker
 
 ```shell
@@ -31,6 +39,7 @@ $ podman run -it -p 8080:8080 \
 $ podman run -it -p 9001:9001 \
     -e POSTGRES_SERVICE=host.containers.internal \
     -e POSTGRES_PASSWORD=1234 \
+    -e REDIS_SERVICE=host.containers.internal \
     -e RUST_LOG=quotation_server=debug,tower_http=trace \
     --name quotation \
     quotation
@@ -46,7 +55,7 @@ If you would like to run everything locally, you need the
 ```shell
 $ cargo build
 $ RUST_LOG=frontend_server=debug,tower_http=trace QUOTATION_SERVICE_HOSTNAME=localhost cargo run --bin frontend-server
-$ RUST_LOG=quotation_server=debug,tower_http=trace POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 cargo run --bin quotation-server
+$ RUST_LOG=quotation_server=debug,tower_http=trace POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 REDIS_SERVICE=localhost cargo run --bin quotation-server
 
 # and goto http://localhost:8080
 ```

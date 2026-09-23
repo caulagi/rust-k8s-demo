@@ -40,6 +40,8 @@ spec:
                   key: pgpassword
             - name: POSTGRES_SERVICE
               value: postgres-service
+            - name: REDIS_SERVICE
+              value: redis-service
           # readinessProbe:
           #   initialDelaySeconds: 20
           #   periodSeconds: 15
