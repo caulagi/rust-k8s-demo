@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:7-bookworm
+          image: redis:8-trixie
           ports:
             - name: redis
               containerPort: 6379

@@ -10,7 +10,7 @@ jobs:
     name: Build & check format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
         with:
@@ -31,14 +31,14 @@ jobs:
     name: Integration test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
-          go-version: 1.22
+          go-version: stable
       - name: Install latest version of Kind
-        run: go install sigs.k8s.io/kind@v0.29.0
+        run: go install sigs.k8s.io/kind@v0.33.0
       - run: PATH=$(go env GOPATH)/bin:$PATH kind version
       - name: Create Kind cluster
         run: PATH=$(go env GOPATH)/bin:$PATH kind create cluster --config kind-config.yaml

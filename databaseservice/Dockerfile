@@ -1,4 +1,4 @@
-FROM postgres:15-bookworm
+FROM postgres:18-trixie
 
 COPY data /docker-entrypoint-initdb.d
 COPY pg_hba.conf /etc/postgresql/pg_hba.conf
