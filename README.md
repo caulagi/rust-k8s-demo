@@ -18,6 +18,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 ## Features
 
 - [x] Microservices talking to each other using grpc
+- [x] Gateway API in front of the frontend, served by Envoy Gateway
 - [x] Postgres behind a Redis cache, both exporting Prometheus metrics
 - [x] Postgres authenticates clients by TLS certificate; there is no database password
 - [x] Local dev setup using skaffold

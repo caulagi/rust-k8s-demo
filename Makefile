@@ -5,8 +5,8 @@ update-proto: # Update protobuf definitions for all microservices
 
 PHONY: bootstrap
 bootstrap:
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
-	kubectl rollout status --timeout 2m -w deployments/ingress-nginx-controller -n ingress-nginx
+	kubectl apply --server-side -f https://github.com/envoyproxy/gateway/releases/download/v1.9.1/install.yaml
+	kubectl wait --timeout 5m -n envoy-gateway-system deployment/envoy-gateway --for condition=Available
 	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.21.2/cert-manager.yaml
 	kubectl rollout status --timeout 2m -w deployments/cert-manager-webhook -n cert-manager
 
@@ -17,7 +17,7 @@ e2e: $(SERVICE_IP)
 	kubectl rollout status --timeout 10m -w deployments/redis-deployment
 	kubectl rollout status --timeout 10m -w deployments/quotationservice
 	kubectl rollout status --timeout 10m -w deployments/frontendservice
-	kubectl rollout status --timeout 10m -w deployments/ingress-nginx-controller -n ingress-nginx
+	kubectl wait --timeout 5m gateway/demo --for condition=Programmed
 	./scripts/e2e-check.sh
 
 .PHONY: help

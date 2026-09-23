@@ -19,6 +19,7 @@ build:
   local: {}
 manifests:
   rawYaml:
+    - manifests/gateway.yaml
     - manifests/postgres-tls.yaml
     - manifests/databaseservice.yaml
     - manifests/frontendservice.yaml
