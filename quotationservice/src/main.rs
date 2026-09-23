@@ -1,15 +1,23 @@
-use std::{env, error::Error, net::SocketAddr, path::Path, sync::Arc, time::Instant};
+use std::{
+    env,
+    error::Error,
+    net::SocketAddr,
+    path::Path,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
+use deadpool_postgres::{Manager, ManagerConfig, Pool, RecyclingMethod, Runtime};
 use metrics::{counter, histogram};
 use metrics_exporter_prometheus::PrometheusBuilder;
 use redis::{aio::ConnectionManager, AsyncCommands};
 use rustls::pki_types::{pem::PemObject, CertificateDer, PrivateKeyDer};
 use tokio::sync::OnceCell;
 use tokio_postgres_rustls::MakeRustlsConnect;
-use tonic::{transport::Server, Request, Response, Status};
+use tonic::{transport::Server, Code, Request, Response, Status};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
-use tracing::{debug, info, warn};
+use tracing::{debug, error, info, warn};
 
 pub mod quotation {
     tonic::include_proto!("quotation");
@@ -23,6 +31,8 @@ use quotation::{
 
 const QUOTATION_COUNT: i64 = 36937;
 const CACHE_TTL_SECONDS: u64 = 300;
+const POSTGRES_POOL_SIZE: usize = 8;
+const PROCESS_METRICS_INTERVAL: Duration = Duration::from_secs(15);
 
 /// A cache in front of Postgres. The connection is made on first use and
 /// re-made after a failure, so Redis may come up after this service and may
@@ -53,20 +63,31 @@ impl Cache {
     }
 
     async fn get(&self, key: &str) -> Result<Option<String>, redis::RedisError> {
-        self.connection().await?.get(key).await
+        let start = Instant::now();
+        let result: Result<Option<String>, redis::RedisError> =
+            async { self.connection().await?.get(key).await }.await;
+        histogram!("cache_request_duration_seconds", "op" => "get")
+            .record(start.elapsed().as_secs_f64());
+        result
     }
 
     async fn set(&self, key: &str, value: &str) -> Result<(), redis::RedisError> {
-        self.connection()
-            .await?
-            .set_ex::<_, _, ()>(key, value, CACHE_TTL_SECONDS)
-            .await
+        let start = Instant::now();
+        let result: Result<(), redis::RedisError> = async {
+            self.connection()
+                .await?
+                .set_ex::<_, _, ()>(key, value, CACHE_TTL_SECONDS)
+                .await
+        }
+        .await;
+        histogram!("cache_request_duration_seconds", "op" => "set")
+            .record(start.elapsed().as_secs_f64());
+        result
     }
 }
 
-/// The database accepts no passwords. Every connection presents the client
-/// certificate its CA issued, whose common name is the database user, and
-/// checks the server's certificate against the same CA.
+/// `dir` holds `ca.crt`, `tls.crt` and `tls.key`, as a cert-manager secret is
+/// laid out. The certificate's common name is the database user.
 fn postgres_tls(dir: &Path) -> Result<MakeRustlsConnect, Box<dyn Error + Send + Sync>> {
     let mut roots = rustls::RootCertStore::empty();
     for cert in CertificateDer::pem_file_iter(dir.join("ca.crt"))? {
@@ -82,10 +103,25 @@ fn postgres_tls(dir: &Path) -> Result<MakeRustlsConnect, Box<dyn Error + Send + 
     Ok(MakeRustlsConnect::new(config))
 }
 
+fn postgres_pool(host: &str, tls: MakeRustlsConnect) -> Result<Pool, Box<dyn Error + Send + Sync>> {
+    let config: tokio_postgres::Config =
+        format!("host={host} user=postgres sslmode=require").parse()?;
+    let manager = Manager::from_config(
+        config,
+        tls,
+        ManagerConfig {
+            recycling_method: RecyclingMethod::Fast,
+        },
+    );
+    Ok(Pool::builder(manager)
+        .max_size(POSTGRES_POOL_SIZE)
+        .runtime(Runtime::Tokio1)
+        .build()?)
+}
+
 pub struct MyQuotation {
     cache: Option<Cache>,
-    postgres_host: String,
-    postgres_tls: MakeRustlsConnect,
+    postgres: Pool,
 }
 
 impl MyQuotation {
@@ -119,32 +155,40 @@ impl MyQuotation {
 
     async fn query_postgres(&self, offset: i64) -> Result<String, Status> {
         let start = Instant::now();
-        let connect_params = format!("host={} user=postgres sslmode=require", self.postgres_host);
-        // Connect to the database.
-        let (client, connection) =
-            tokio_postgres::connect(connect_params.as_str(), self.postgres_tls.clone())
-                .await
-                .unwrap();
+        let client = self.postgres.get().await.map_err(|e| {
+            error!("no database connection: {e}");
+            Status::unavailable("database unavailable")
+        })?;
+        histogram!("postgres_checkout_duration_seconds").record(start.elapsed().as_secs_f64());
 
-        // The connection object performs the actual communication with the database,
-        // so spawn it off to run on its own.
-        tokio::spawn(async move {
-            if let Err(e) = connection.await {
-                eprintln!("connection error: {e}");
-            }
-        });
-
+        let start = Instant::now();
         let rows = client
             .query(
                 "SELECT content, author FROM quotation OFFSET $1 LIMIT 1;",
                 &[&offset],
             )
             .await
-            .unwrap();
+            .map_err(|e| {
+                error!("query failed: {e}");
+                Status::internal("database query failed")
+            })?;
         histogram!("postgres_query_duration_seconds").record(start.elapsed().as_secs_f64());
 
-        let value: &str = rows[0].get(0);
-        Ok(value.to_string())
+        let row = rows
+            .first()
+            .ok_or_else(|| Status::internal(format!("no quotation at offset {offset}")))?;
+        Ok(row.get(0))
+    }
+
+    async fn random_quotation(&self) -> Result<String, Status> {
+        let offset = rand::random_range(0..QUOTATION_COUNT);
+        let key = format!("quotation:{offset}");
+        if let Some(value) = self.cached(&key).await {
+            return Ok(value);
+        }
+        let value = self.query_postgres(offset).await?;
+        self.remember(&key, &value).await;
+        Ok(value)
     }
 }
 
@@ -157,22 +201,15 @@ impl Quotation for MyQuotation {
         let start = Instant::now();
         debug!("REQUEST = {:?}", request);
 
-        let offset = rand::random_range(0..QUOTATION_COUNT);
-        let key = format!("quotation:{offset}");
-        let message = match self.cached(&key).await {
-            Some(value) => value,
-            None => {
-                let value = self.query_postgres(offset).await?;
-                self.remember(&key, &value).await;
-                value
-            }
-        };
+        let result = self.random_quotation().await;
 
-        counter!("grpc_requests_total", "method" => "get_random_quotation").increment(1);
+        let code = result.as_ref().map_or_else(Status::code, |_| Code::Ok);
+        counter!("grpc_requests_total", "method" => "get_random_quotation", "code" => format!("{code:?}"))
+            .increment(1);
         histogram!("grpc_request_duration_seconds", "method" => "get_random_quotation")
             .record(start.elapsed().as_secs_f64());
 
-        Ok(Response::new(QuotationResponse { message }))
+        result.map(|message| Response::new(QuotationResponse { message }))
     }
 }
 
@@ -192,11 +229,20 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
         .install()?;
     info!("Metrics available on {:?}/metrics", metrics_addr);
 
+    let process = metrics_process::Collector::default();
+    process.describe();
+    tokio::spawn(async move {
+        loop {
+            process.collect();
+            tokio::time::sleep(PROCESS_METRICS_INTERVAL).await;
+        }
+    });
+
     let addr = "0.0.0.0:9001".parse().unwrap();
+    let tls = postgres_tls(Path::new(&env::var("POSTGRES_TLS_DIR")?))?;
     let quotationr = MyQuotation {
         cache: Cache::from_env()?,
-        postgres_host: env::var("POSTGRES_SERVICE")?,
-        postgres_tls: postgres_tls(Path::new(&env::var("POSTGRES_TLS_DIR")?))?,
+        postgres: postgres_pool(&env::var("POSTGRES_SERVICE")?, tls)?,
     };
 
     // Build our middleware stack
