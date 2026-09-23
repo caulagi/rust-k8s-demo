@@ -2,6 +2,19 @@ name: Build & test project
 
 on:
   push:
+    # Everything the build, lint or kind test reads; docs and editor files are out.
+    paths:
+      - "**"
+      - "!**.md"
+      - "!docs/**"
+      - "!LICENSE"
+      - "!flake.nix"
+      - "!flake.lock"
+      - "!.envrc"
+      - "!.editorconfig"
+      - "!.gitattributes"
+      - "!.github/**"
+      - ".github/workflows/ci.yml"
   schedule:
     - cron: "0 6 * * *"
 
