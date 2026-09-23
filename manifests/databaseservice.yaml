@@ -15,6 +15,10 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9187"
     spec:
+      # Postgres and libpq accept a private key owned by root only when its
+      # group may read it and nobody else; the group is postgres's.
+      securityContext:
+        fsGroup: 999
       containers:
         - name: databaseservice
           image: databaseservice
@@ -25,12 +29,10 @@ spec:
             initialDelaySeconds: 180
             tcpSocket:
               port: 5432
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: pgpassword
+          volumeMounts:
+            - name: server-tls
+              mountPath: /etc/postgresql/tls/server
+              readOnly: true
         - name: postgres-exporter
           image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
           ports:
@@ -38,14 +40,13 @@ spec:
               containerPort: 9187
           env:
             - name: DATA_SOURCE_URI
-              value: "localhost:5432/postgres?sslmode=disable"
+              value: "localhost:5432/postgres?sslmode=verify-full&sslrootcert=/etc/postgresql/tls/client/ca.crt&sslcert=/etc/postgresql/tls/client/tls.crt&sslkey=/etc/postgresql/tls/client/tls.key"
             - name: DATA_SOURCE_USER
               value: postgres
-            - name: DATA_SOURCE_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: pgpassword
+          volumeMounts:
+            - name: client-tls
+              mountPath: /etc/postgresql/tls/client
+              readOnly: true
           resources:
             requests:
               cpu: 50m
@@ -53,6 +54,15 @@ spec:
             limits:
               cpu: 100m
               memory: 64Mi
+      volumes:
+        - name: server-tls
+          secret:
+            secretName: postgres-server-tls
+            defaultMode: 0640
+        - name: client-tls
+          secret:
+            secretName: postgres-client-tls
+            defaultMode: 0640
 ---
 apiVersion: v1
 kind: Service

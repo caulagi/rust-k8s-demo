@@ -1,5 +1,14 @@
 # Local development setup
 
+#### Certificates
+
+Postgres takes no password; clients authenticate with a certificate. In a
+cluster cert-manager issues them. Locally, mint a set once:
+
+```
+$ ./scripts/dev-certs.sh
+```
+
 #### Setup local postgres database
 
 ```
@@ -8,12 +17,12 @@ $ podman machine init rust-k8s-demo --volume $(pwd):/app
 
 $ podman machine start rust-k8s-demo
 $ podman system connection default rust-k8s-demo
+$ podman build -t database databaseservice
 $ podman run \
-    -e POSTGRES_PASSWORD=1234 \
     -p 5432:5432 \
-    -v /app/databaseservice/data/data.sql:/docker-entrypoint-initdb.d/01-data.sql \
+    -v /app/certs/server:/etc/postgresql/tls/server:ro \
     --name postgres \
-    postgres:15-bookworm
+    database
 ```
 
 #### Setup local redis (optional)
@@ -38,7 +47,8 @@ $ podman run -it -p 8080:8080 \
     frontend
 $ podman run -it -p 9001:9001 \
     -e POSTGRES_SERVICE=host.containers.internal \
-    -e POSTGRES_PASSWORD=1234 \
+    -e POSTGRES_TLS_DIR=/etc/postgresql/tls/client \
+    -v /app/certs/client:/etc/postgresql/tls/client:ro \
     -e REDIS_SERVICE=host.containers.internal \
     -e RUST_LOG=quotation_server=debug,tower_http=trace \
     --name quotation \
@@ -55,7 +65,7 @@ If you would like to run everything locally, you need the
 ```shell
 $ cargo build
 $ RUST_LOG=frontend_server=debug,tower_http=trace QUOTATION_SERVICE_HOSTNAME=localhost cargo run --bin frontend-server
-$ RUST_LOG=quotation_server=debug,tower_http=trace POSTGRES_SERVICE=localhost POSTGRES_PASSWORD=1234 REDIS_SERVICE=localhost cargo run --bin quotation-server
+$ RUST_LOG=quotation_server=debug,tower_http=trace POSTGRES_SERVICE=localhost POSTGRES_TLS_DIR=certs/client REDIS_SERVICE=localhost cargo run --bin quotation-server
 
 # and goto http://localhost:8080
 ```

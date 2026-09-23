@@ -7,7 +7,8 @@ PHONY: bootstrap
 bootstrap:
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 	kubectl rollout status --timeout 2m -w deployments/ingress-nginx-controller -n ingress-nginx
-	kubectl create secret generic postgres-password --from-literal=pgpassword=panda
+	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.21.2/cert-manager.yaml
+	kubectl rollout status --timeout 2m -w deployments/cert-manager-webhook -n cert-manager
 
 .PHONY: e2e
 e2e: $(SERVICE_IP)

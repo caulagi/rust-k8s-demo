@@ -1,0 +1,66 @@
+# A CA of the database's own. The server proves it is the database and every
+# client proves it is the database user, so no password exists to leak.
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-ca
+spec:
+  isCA: true
+  commonName: rust-k8s-demo postgres CA
+  secretName: postgres-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: postgres-ca
+spec:
+  ca:
+    secretName: postgres-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-server
+spec:
+  secretName: postgres-server-tls
+  dnsNames:
+    - postgres-service
+    - postgres-service.default.svc
+    - postgres-service.default.svc.cluster.local
+    # The exporter sidecar connects over the pod's loopback.
+    - localhost
+  usages:
+    - server auth
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: postgres-ca
+---
+# The common name is the database user the holder may connect as.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-client
+spec:
+  secretName: postgres-client-tls
+  commonName: postgres
+  usages:
+    - client auth
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: postgres-ca
