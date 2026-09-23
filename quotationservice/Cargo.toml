@@ -18,8 +18,11 @@ prost = "0.14.3"
 prost-types = "0.14.3"
 rand = "0.10"
 redis = { version = "1.7", features = ["tokio-comp", "connection-manager"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
+rustls-pki-types = { version = "1", features = ["std"] }
 tokio = { version = "1.50.0", features = ["macros", "rt-multi-thread"] }
 tokio-postgres = "0.7.17"
+tokio-postgres-rustls = "0.14"
 tonic = "0.14.5"
 tonic-prost = "0.14.5"
 tower = "0.5.3"

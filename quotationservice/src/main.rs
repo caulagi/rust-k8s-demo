@@ -1,10 +1,11 @@
-use std::{env, error::Error, net::SocketAddr, time::Instant};
+use std::{env, error::Error, net::SocketAddr, path::Path, sync::Arc, time::Instant};
 
 use metrics::{counter, histogram};
 use metrics_exporter_prometheus::PrometheusBuilder;
 use redis::{aio::ConnectionManager, AsyncCommands};
+use rustls::pki_types::{pem::PemObject, CertificateDer, PrivateKeyDer};
 use tokio::sync::OnceCell;
-use tokio_postgres::NoTls;
+use tokio_postgres_rustls::MakeRustlsConnect;
 use tonic::{transport::Server, Request, Response, Status};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
@@ -63,9 +64,28 @@ impl Cache {
     }
 }
 
-#[derive(Default)]
+/// The database accepts no passwords. Every connection presents the client
+/// certificate its CA issued, whose common name is the database user, and
+/// checks the server's certificate against the same CA.
+fn postgres_tls(dir: &Path) -> Result<MakeRustlsConnect, Box<dyn Error + Send + Sync>> {
+    let mut roots = rustls::RootCertStore::empty();
+    for cert in CertificateDer::pem_file_iter(dir.join("ca.crt"))? {
+        roots.add(cert?)?;
+    }
+    let certs = CertificateDer::pem_file_iter(dir.join("tls.crt"))?.collect::<Result<_, _>>()?;
+    let key = PrivateKeyDer::from_pem_file(dir.join("tls.key"))?;
+    let provider = Arc::new(rustls::crypto::ring::default_provider());
+    let config = rustls::ClientConfig::builder_with_provider(provider)
+        .with_safe_default_protocol_versions()?
+        .with_root_certificates(roots)
+        .with_client_auth_cert(certs, key)?;
+    Ok(MakeRustlsConnect::new(config))
+}
+
 pub struct MyQuotation {
     cache: Option<Cache>,
+    postgres_host: String,
+    postgres_tls: MakeRustlsConnect,
 }
 
 impl MyQuotation {
@@ -99,15 +119,12 @@ impl MyQuotation {
 
     async fn query_postgres(&self, offset: i64) -> Result<String, Status> {
         let start = Instant::now();
-        let connect_params = format!(
-            "host={} user=postgres password={}",
-            env::var("POSTGRES_SERVICE").unwrap(),
-            env::var("POSTGRES_PASSWORD").unwrap()
-        );
+        let connect_params = format!("host={} user=postgres sslmode=require", self.postgres_host);
         // Connect to the database.
-        let (client, connection) = tokio_postgres::connect(connect_params.as_str(), NoTls)
-            .await
-            .unwrap();
+        let (client, connection) =
+            tokio_postgres::connect(connect_params.as_str(), self.postgres_tls.clone())
+                .await
+                .unwrap();
 
         // The connection object performs the actual communication with the database,
         // so spawn it off to run on its own.
@@ -178,6 +195,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     let addr = "0.0.0.0:9001".parse().unwrap();
     let quotationr = MyQuotation {
         cache: Cache::from_env()?,
+        postgres_host: env::var("POSTGRES_SERVICE")?,
+        postgres_tls: postgres_tls(Path::new(&env::var("POSTGRES_TLS_DIR")?))?,
     };
 
     // Build our middleware stack

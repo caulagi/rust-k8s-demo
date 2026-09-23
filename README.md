@@ -19,6 +19,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 
 - [x] Microservices talking to each other using grpc
 - [x] Postgres behind a Redis cache, both exporting Prometheus metrics
+- [x] Postgres authenticates clients by TLS certificate; there is no database password
 - [x] Local dev setup using skaffold
 - [x] CI: Build code and run e2e tests for each commit in a k8s cluster
 
@@ -57,7 +58,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [ ] CD
 - [ ] Distributed (open) tracing - partially done
 - [ ] Prometheus, grafana, alert-manager
-- [ ] Cert Manager
+- [x] Cert Manager, issuing the database's server and client certificates
 - [ ] External DNS(?)
 
 

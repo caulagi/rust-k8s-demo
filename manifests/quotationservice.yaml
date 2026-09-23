@@ -33,15 +33,20 @@ spec:
           env:
             - name: RUST_LOG
               value: quotation_server=debug,tower_http=trace
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: pgpassword
             - name: POSTGRES_SERVICE
               value: postgres-service
+            - name: POSTGRES_TLS_DIR
+              value: /etc/postgresql/tls/client
             - name: REDIS_SERVICE
               value: redis-service
+          volumeMounts:
+            - name: client-tls
+              mountPath: /etc/postgresql/tls/client
+              readOnly: true
+      volumes:
+        - name: client-tls
+          secret:
+            secretName: postgres-client-tls
           # readinessProbe:
           #   initialDelaySeconds: 20
           #   periodSeconds: 15
