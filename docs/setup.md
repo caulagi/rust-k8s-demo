@@ -30,7 +30,7 @@ $ podman run \
 Without `REDIS_SERVICE` the quotation service reads every quotation from Postgres.
 
 ```
-$ podman run -p 6379:6379 --name redis redis:7-bookworm
+$ podman run -p 6379:6379 --name redis redis:8-trixie
 ```
 
 #### Using docker

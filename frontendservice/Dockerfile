@@ -1,4 +1,4 @@
-FROM rust:1.91.0-bookworm as build
+FROM rust:1.98.1-trixie AS build
 
 ENV RUST_LOG frontend=info
 ENV FORTUNE_SERVICE_HOSTNAME fortuneservice
@@ -15,6 +15,6 @@ RUN cargo build
 
 EXPOSE 8080
 
-FROM debian:bookworm
+FROM debian:trixie
 COPY --from=build /code/target/debug/frontend-server /usr/local/bin/frontend-server
 ENTRYPOINT ["/usr/local/bin/frontend-server"]
