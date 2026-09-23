@@ -19,6 +19,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] Microservices talking to each other using grpc
 - [x] Local dev setup using skaffold
 - [x] CI: Build code and run e2e tests for each commit in a k8s cluster
+- [x] Images published to `ghcr.io/caulagi/rust-k8s-demo/<service>` on every push to main and every `v*` tag
 
 ## Getting started
 
