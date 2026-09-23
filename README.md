@@ -22,6 +22,7 @@ use fully asynchronous Rust libraries and are based on [tokio](https://tokio.rs/
 - [x] Postgres authenticates clients by TLS certificate; there is no database password
 - [x] Local dev setup using skaffold
 - [x] CI: Build code and run e2e tests for each commit in a k8s cluster
+- [x] Images published to `ghcr.io/caulagi/rust-k8s-demo/<service>` on every push to main and every `v*` tag
 
 ## Getting started
 
