@@ -12,15 +12,17 @@ path = "src/main.rs"
 
 [dependencies]
 bytes = "1.12.1"
+deadpool-postgres = { version = "0.14", features = ["rt_tokio_1"] }
 metrics = "0.24.6"
 metrics-exporter-prometheus = { version = "0.18.3", default-features = false, features = ["http-listener"] }
+metrics-process = "2.4"
 prost = "0.14.4"
 prost-types = "0.14.4"
 rand = "0.10"
 redis = { version = "1.7", features = ["tokio-comp", "connection-manager"] }
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
 rustls-pki-types = { version = "1", features = ["std"] }
-tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread", "time"] }
 tokio-postgres = "0.7.18"
 tokio-postgres-rustls = "0.14"
 tonic = "0.14.6"
