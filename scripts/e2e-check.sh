@@ -5,7 +5,7 @@ set -u
 
 code=000
 for _ in $(seq 1 30); do
-  code=$(curl -s -w "%{http_code}" -o /dev/null http://localhost)
+  code=$(curl -s --max-time 5 -w "%{http_code}" -o /dev/null http://localhost)
   if [ "$code" = 200 ]; then
     echo "frontend answered 200"
     exit 0

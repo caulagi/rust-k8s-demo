@@ -6,7 +6,9 @@ spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 ---
 # kind has no load balancer, so Envoy is reached through the node port that
-# kind-config.yaml maps to port 80 on the host.
+# kind-config.yaml maps to port 80 on the host. That port is the control
+# plane's, and Envoy runs on the workers, so the traffic policy must forward
+# across nodes.
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
@@ -17,6 +19,7 @@ spec:
     kubernetes:
       envoyService:
         type: NodePort
+        externalTrafficPolicy: Cluster
         patch:
           type: StrategicMerge
           value:
