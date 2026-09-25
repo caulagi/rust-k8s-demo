@@ -32,6 +32,8 @@ use quotation::{
 const QUOTATION_COUNT: i64 = 36937;
 const CACHE_TTL_SECONDS: u64 = 300;
 const POSTGRES_POOL_SIZE: usize = 8;
+const POSTGRES_CONNECT_TIMEOUT: Duration = Duration::from_secs(3);
+const POSTGRES_POOL_WAIT_TIMEOUT: Duration = Duration::from_secs(2);
 const PROCESS_METRICS_INTERVAL: Duration = Duration::from_secs(15);
 
 /// A cache in front of Postgres. The connection is made on first use and
@@ -104,8 +106,9 @@ fn postgres_tls(dir: &Path) -> Result<MakeRustlsConnect, Box<dyn Error + Send + 
 }
 
 fn postgres_pool(host: &str, tls: MakeRustlsConnect) -> Result<Pool, Box<dyn Error + Send + Sync>> {
-    let config: tokio_postgres::Config =
+    let mut config: tokio_postgres::Config =
         format!("host={host} user=postgres sslmode=require").parse()?;
+    config.connect_timeout(POSTGRES_CONNECT_TIMEOUT);
     let manager = Manager::from_config(
         config,
         tls,
@@ -115,6 +118,9 @@ fn postgres_pool(host: &str, tls: MakeRustlsConnect) -> Result<Pool, Box<dyn Err
     );
     Ok(Pool::builder(manager)
         .max_size(POSTGRES_POOL_SIZE)
+        .wait_timeout(Some(POSTGRES_POOL_WAIT_TIMEOUT))
+        // A little over the connect timeout, so the driver's own error wins.
+        .create_timeout(Some(POSTGRES_CONNECT_TIMEOUT + Duration::from_secs(1)))
         .runtime(Runtime::Tokio1)
         .build()?)
 }
@@ -155,11 +161,13 @@ impl MyQuotation {
 
     async fn query_postgres(&self, offset: i64) -> Result<String, Status> {
         let start = Instant::now();
-        let client = self.postgres.get().await.map_err(|e| {
+        let checkout = self.postgres.get().await;
+        // Recorded before the error check: slow failed checkouts matter most.
+        histogram!("postgres_checkout_duration_seconds").record(start.elapsed().as_secs_f64());
+        let client = checkout.map_err(|e| {
             error!("no database connection: {e}");
             Status::unavailable("database unavailable")
         })?;
-        histogram!("postgres_checkout_duration_seconds").record(start.elapsed().as_secs_f64());
 
         let start = Instant::now();
         let rows = client
