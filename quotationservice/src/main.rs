@@ -253,9 +253,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
         postgres: postgres_pool(&env::var("POSTGRES_SERVICE")?, tls)?,
     };
 
-    // Build our middleware stack
     let layer = ServiceBuilder::new()
-        // Log all requests and responses
         .layer(
             TraceLayer::new_for_grpc().make_span_with(DefaultMakeSpan::new().include_headers(true)),
         )
