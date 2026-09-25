@@ -3,8 +3,7 @@ FROM postgres:18-trixie
 COPY data /docker-entrypoint-initdb.d
 COPY pg_hba.conf /etc/postgresql/pg_hba.conf
 
-# The entrypoint refuses to initialise without a password or this. It only
-# shapes the pg_hba.conf it generates, which the one below replaces.
+# Satisfies the entrypoint's initdb check; the pg_hba.conf above decides access.
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
 # The certificates are mounted from the postgres-server-tls secret.

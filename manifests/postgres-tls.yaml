@@ -1,5 +1,5 @@
-# A CA of the database's own. The server proves it is the database and every
-# client proves it is the database user, so no password exists to leak.
+# A CA of the database's own: the server certificate names the service and
+# the client certificate names the database user.
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
